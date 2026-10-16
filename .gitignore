@@ -1,0 +1,14 @@
+# Secrets
+.env
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Build output / dependencies
+node_modules/
+.next/
+target/
+*.tsbuildinfo
+*.log

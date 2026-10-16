@@ -1,0 +1,10 @@
+target
+uploads
+.idea
+.github
+.mvn
+mvnw
+mvnw.cmd
+*.iml
+HELP.md
+.git

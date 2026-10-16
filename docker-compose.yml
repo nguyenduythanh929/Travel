@@ -1,0 +1,68 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: travel-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-123456}
+      MYSQL_DATABASE: travel
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "${MYSQL_HOST_PORT:-3307}:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      # Every *.sql file here is imported once, on the very first start
+      - ./database/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_ROOT_PASSWORD:-123456}"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  backend:
+    build: ./travel
+    image: travel-backend
+    container_name: travel-backend
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      # Overrides values in travel/src/main/resources/application.properties
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/travel?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD:-123456}
+      SPRING_JPA_SHOW_SQL: "false"
+    ports:
+      - "8088:8088"
+    volumes:
+      - ./travel/uploads:/app/uploads
+
+  travelweb:
+    build: ./travelweb
+    image: travel-web
+    container_name: travel-web
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+
+  admin:
+    build: ./admintravel
+    image: travel-admin
+    container_name: travel-admin
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3001:3001"
+
+volumes:
+  mysql-data:
