@@ -33,6 +33,19 @@ Then open:
 
 The backend waits for MySQL to be ready before it starts. It can take up to a minute after `docker compose up` returns before the site loads data.
 
+### Demo accounts
+
+| Account | Email | Password | Use it on |
+|---|---|---|---|
+| Customer | `user@travel.com` | `User@123456` | Website (http://localhost:3000) |
+| Admin | `admin@travel.com` | `Admin@123456` | Admin dashboard (http://localhost:3001) |
+
+These are created automatically the first time the database starts. If your database already existed before they were added, create them with:
+
+```bash
+docker compose exec -T mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" travel' < database/init/02-demo-accounts.sql
+```
+
 ### Useful commands
 
 ```bash
