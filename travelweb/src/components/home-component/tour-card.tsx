@@ -1,4 +1,5 @@
 "use client";
+import { BACKEND_URL } from "@/lib/backend";
 import { usePathname } from "next/navigation";
 
 type TourType = {
@@ -65,7 +66,7 @@ export default function TourCard({ tour }: TourCardProps) {
       {/* Image */}
       <div className="relative w-full h-[200px] rounded-lg overflow-hidden">
         <img
-          src={`http://localhost:8088/api/tours/images/${tour?.imageUrl}`}
+          src={`${BACKEND_URL}/api/tours/images/${tour?.imageUrl}`}
           alt="tour"
           className="object-cover"
         />

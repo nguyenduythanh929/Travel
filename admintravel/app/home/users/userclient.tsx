@@ -1,4 +1,5 @@
 "use client";
+import { BACKEND_URL } from "@/lib/backend";
 import UserAction from "@/components/users/UserAction";
 import UserTable from "@/components/users/UserTable";
 import UserEditModal from "@/components/users/UserEditModal";
@@ -51,7 +52,7 @@ export default function UsersPageClient() {
     const fetchuser = async () => {
       try {
         setLoading(true);
-        const baseUrl = "http://localhost:8088/api";
+        const baseUrl = `${BACKEND_URL}/api`;
         const trimmedKeyword = keyword.trim();
 
         // Backend uses PageRequest.of(offset, limit) which expects page number (0-indexed)

@@ -1,4 +1,5 @@
 "use client";
+import { BACKEND_URL } from "@/lib/backend";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -36,7 +37,7 @@ export default function RegisterForm() {
   });
   async function onsubmit(data: FormValue) {
     try {
-      const res = await fetch(`http://localhost:8088/api/users/register`, {
+      const res = await fetch(`${BACKEND_URL}/api/users/register`, {
         body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json",
@@ -77,7 +78,7 @@ export default function RegisterForm() {
         note: "Note",
         status: 4,
       };
-      const bookingRes = await fetch("http://localhost:8088/api/bookings", {
+      const bookingRes = await fetch(`${BACKEND_URL}/api/bookings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

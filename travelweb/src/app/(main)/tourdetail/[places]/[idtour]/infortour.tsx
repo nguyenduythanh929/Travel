@@ -1,3 +1,4 @@
+import { BACKEND_URL } from "@/lib/backend";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,7 +14,7 @@ export default function TourPage({ data }: { data: any }) {
       {/* Tour Header Images */}
       <div className="grid grid-cols-1 gap-4">
         <img
-          src={`http://localhost:8088/api/tours/images/${tour?.avatar}`}
+          src={`${BACKEND_URL}/api/tours/images/${tour?.avatar}`}
           alt={tour.name || "tour image"}
           className="w-full h-80 object-cover rounded-2xl shadow"
         />
@@ -22,7 +23,7 @@ export default function TourPage({ data }: { data: any }) {
             {tour.images.slice(1, 5).map((img: string, index: number) => (
               <img
                 key={index}
-                src={`http://localhost:8088/api/tours/images/${img}`}
+                src={`${BACKEND_URL}/api/tours/images/${img}`}
                 alt={`${tour.name} ${index + 1}`}
                 className="rounded-xl h-28 w-full object-cover"
               />

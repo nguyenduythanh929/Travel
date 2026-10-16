@@ -42,6 +42,23 @@ docker compose down               # stop everything (data is kept)
 docker compose down -v            # stop and DELETE the database (re-imports sample data next start)
 ```
 
+### Running on a server or another machine
+
+By default the apps expect to be opened at `localhost`. If Docker runs on one machine and you open the site from another (for example `http://192.168.1.50:3000`), tell the build which address people will use. Add this to `.env`:
+
+```bash
+PUBLIC_HOST=192.168.1.50
+```
+
+Then rebuild the frontends and restart:
+
+```bash
+docker compose build travelweb admin
+docker compose up -d
+```
+
+The frontends need the rebuild because the backend address is built into their browser code. Without it, the site loads, but every API call fails with `ERR_CONNECTION_REFUSED`.
+
 ### Troubleshooting
 
 - **"port is already allocated"**: another program is using port 3000, 3001, 8088 or 3307. Stop that program. For MySQL only, you can also set a different host port: `MYSQL_HOST_PORT=3310 docker compose up -d`.

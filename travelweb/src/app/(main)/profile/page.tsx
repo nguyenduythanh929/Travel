@@ -1,4 +1,5 @@
 "use client";
+import { BACKEND_URL } from "@/lib/backend";
 import React, { useEffect, useMemo, useState } from "react";
 import {
   User,
@@ -217,7 +218,7 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
   const handleSave = async (): void => {
     setIsEditing(false);
     try {
-      const res = await fetch(`http://localhost:8088/api/users/${userId}`, {
+      const res = await fetch(`${BACKEND_URL}/api/users/${userId}`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -546,7 +547,7 @@ const ChangePassword = ({ userId }: ChangePasswordProps) => {
     }
     try {
       const res = await fetch(
-        `http://localhost:8088/api/users/change-password/${userId}`,
+        `${BACKEND_URL}/api/users/change-password/${userId}`,
         {
           method: "PUT",
           headers: {
@@ -748,7 +749,7 @@ const ProfilePage: React.FC = () => {
   useEffect(() => {
     try {
       const fetchuser = async () => {
-        const res = await fetch(`http://localhost:8088/api/users/${userId}`, {
+        const res = await fetch(`${BACKEND_URL}/api/users/${userId}`, {
           credentials: "include",
         });
         if (!res.ok) {
@@ -767,7 +768,7 @@ const ProfilePage: React.FC = () => {
       };
       const fetchtour = async () => {
         const res = await fetch(
-          `http://localhost:8088/api/bookings/user/${userId}/all`,
+          `${BACKEND_URL}/api/bookings/user/${userId}/all`,
           {
             credentials: "include",
           }

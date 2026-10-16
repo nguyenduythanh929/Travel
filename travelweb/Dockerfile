@@ -9,7 +9,10 @@ FROM node:22-slim AS build
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-ENV NEXT_TELEMETRY_DISABLED=1
+# Backend URL as seen from the browser; baked into the client bundle at build time
+ARG NEXT_PUBLIC_BACKEND_URL=http://localhost:8088
+ENV NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL \
+    NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
 # ---- Runtime ----

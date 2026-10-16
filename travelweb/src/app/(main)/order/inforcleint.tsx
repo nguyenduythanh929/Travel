@@ -1,4 +1,5 @@
 "use client";
+import { BACKEND_URL } from "@/lib/backend";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/app/AppProvider";
 import { toast } from "sonner";
@@ -100,7 +101,7 @@ export default function PaymentForm({
         returnUrl: `${window.location.origin}/order?success=true`,
       };
 
-      const res = await fetch("http://localhost:8088/api/checkout", {
+      const res = await fetch(`${BACKEND_URL}/api/checkout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(checkoutRequest),

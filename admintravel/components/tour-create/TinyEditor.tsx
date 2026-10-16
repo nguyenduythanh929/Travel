@@ -1,4 +1,5 @@
 "use client";
+import { BACKEND_URL } from "@/lib/backend";
 
 import { useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
@@ -34,7 +35,7 @@ export default function TinyEditor({
         license_key: "gpl", // ✅ Fix: Add GPL license key for open source use
         base_url: TINYMCE_BASE,
         suffix: ".min",
-        images_upload_url: "http://localhost:8088/api/tinymce/upload",
+        images_upload_url: `${BACKEND_URL}/api/tinymce/upload`,
         // File picker types
         file_picker_types: "image",
 
@@ -54,7 +55,7 @@ export default function TinyEditor({
                   const formData = new FormData();
                   formData.append("file", file);
 
-                  fetch("http://localhost:8088/api/tinymce/upload", {
+                  fetch(`${BACKEND_URL}/api/tinymce/upload`, {
                     method: "POST",
                     body: formData,
                   })
@@ -85,7 +86,7 @@ export default function TinyEditor({
             const formData = new FormData();
             formData.append("file", blobInfo.blob(), blobInfo.filename());
 
-            fetch("http://localhost:8088/api/tinymce/upload", {
+            fetch(`${BACKEND_URL}/api/tinymce/upload`, {
               method: "POST",
               body: formData,
             })

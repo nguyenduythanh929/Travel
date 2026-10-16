@@ -1,8 +1,9 @@
+import { BACKEND_URL } from "@/lib/backend";
 import { Client, IMessage } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { useNotificationStore, BookingNotification } from "@/store/notificationStore";
 
-const WEBSOCKET_URL = "http://localhost:8088/ws";
+const WEBSOCKET_URL = `${BACKEND_URL}/ws`;
 
 // WebSocket topics
 const ADMIN_BOOKING_TOPIC = "/topic/admin/bookings";

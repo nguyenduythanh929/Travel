@@ -1,5 +1,6 @@
 // src/components/auth/ForgotPasswordModal.tsx
 "use client";
+import { BACKEND_URL } from "@/lib/backend";
 
 import React, { useState } from "react";
 import { toast } from "sonner";
@@ -26,7 +27,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
     // TODO: call API gửi OTP
   
   try {
-    const res = await fetch("http://localhost:8088/api/users/forgot-password", {
+    const res = await fetch(`${BACKEND_URL}/api/users/forgot-password`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -53,7 +54,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
     e.preventDefault();
      
   try {
-    const res = await fetch("http://localhost:8088/api/users/verify-otp", {
+    const res = await fetch(`${BACKEND_URL}/api/users/verify-otp`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -81,7 +82,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
       return
     }
     try {
-    const res = await fetch("http://localhost:8088/api/users/reset-password", {
+    const res = await fetch(`${BACKEND_URL}/api/users/reset-password`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -1,3 +1,4 @@
+import { BACKEND_URL } from "@/lib/backend";
 // store/counterStore.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -22,7 +23,7 @@ export const usecart = create<CartItem>()(
       fetchCart: async (userId: number) => {
         set({ loading: true });
         try {
-          const res = await fetch(`http://localhost:8088/api/bookings/user/${userId}`);
+          const res = await fetch(`${BACKEND_URL}/api/bookings/user/${userId}`);
           const data = await res.json();
           set({ cart: data, loading: false });
           return data;

@@ -1,4 +1,5 @@
 "use client";
+import { BACKEND_URL } from "@/lib/backend";
 
 import { useEffect, useState } from "react";
 import {
@@ -280,7 +281,7 @@ export default function ToursTrashPage() {
                         {tour.imageUrl && (
                           <img
                             className="inner-avatar"
-                            src={`http://localhost:8088/api/tours/images/${tour.imageUrl}`}
+                            src={`${BACKEND_URL}/api/tours/images/${tour.imageUrl}`}
                             alt={tour.name}
                           />
                         )}

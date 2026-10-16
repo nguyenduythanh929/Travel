@@ -1,4 +1,5 @@
 "use client";
+import { BACKEND_URL } from "@/lib/backend";
 
 import { useEffect, useState } from "react";
 import {
@@ -43,7 +44,7 @@ export default function ToursPage() {
       return raw;
     }
     // Còn lại coi là filename trong thư mục uploads trên backend
-    return `http://localhost:8088/api/tours/images/${raw}`;
+    return `${BACKEND_URL}/api/tours/images/${raw}`;
   };
 
   // Reset to page 1 when filters change

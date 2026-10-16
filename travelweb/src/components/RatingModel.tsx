@@ -1,3 +1,4 @@
+import { BACKEND_URL } from "@/lib/backend";
 import React, { useState, useEffect } from "react";
 
 // Simple Star Rating Modal
@@ -131,7 +132,7 @@ const RatingModel = ({ bookingStatus, tourId, userId }: RatingModelProps) => {
 
       try {
         const response = await fetch(
-          `http://localhost:8088/api/reviews/tour/${tourId}/user/${userId}`,
+          `${BACKEND_URL}/api/reviews/tour/${tourId}/user/${userId}`,
           {
             credentials: "include",
           }
@@ -156,8 +157,8 @@ const RatingModel = ({ bookingStatus, tourId, userId }: RatingModelProps) => {
     try {
       const isUpdate = !!existingReview;
       const url = isUpdate
-        ? `http://localhost:8088/api/reviews/${existingReview.id}`
-        : `http://localhost:8088/api/reviews`;
+        ? `${BACKEND_URL}/api/reviews/${existingReview.id}`
+        : `${BACKEND_URL}/api/reviews`;
 
       const response = await fetch(url, {
         method: isUpdate ? "PUT" : "POST",

@@ -1,4 +1,5 @@
 "use client";
+import { BACKEND_URL } from "@/lib/backend";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { deleteCartItem } from "../../api/cart/route";
@@ -82,7 +83,7 @@ export default function CardItemOrder({
   };
 
   const imageUrl = tour.tourAvatar
-    ? `http://localhost:8088/api/tours/images/${tour.tourAvatar}`
+    ? `${BACKEND_URL}/api/tours/images/${tour.tourAvatar}`
     : "/placeholder-tour.jpg";
 
   return (

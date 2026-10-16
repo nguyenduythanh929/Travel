@@ -1,4 +1,5 @@
 "use client";
+import { BACKEND_URL } from "@/lib/backend";
 
 import { useState, useMemo } from "react";
 import { FaCalendarAlt, FaBus, FaTicketAlt } from "react-icons/fa";
@@ -89,7 +90,7 @@ export default function TourCardSumary({ data }: { data: any }) {
       async function postitem() {
         try {
           const result = await fetch(
-            "http://localhost:8088/api/cart/add",
+            `${BACKEND_URL}/api/cart/add`,
             {
               method: "POST",
               body: JSON.stringify(valueForm),
@@ -123,7 +124,7 @@ export default function TourCardSumary({ data }: { data: any }) {
       </h2>
 
       <img
-        src={`http://localhost:8088/api/tours/images/${tour?.avatar}`}
+        src={`${BACKEND_URL}/api/tours/images/${tour?.avatar}`}
         alt={tour.name}
         className="rounded-lg w-full mb-3"
       />

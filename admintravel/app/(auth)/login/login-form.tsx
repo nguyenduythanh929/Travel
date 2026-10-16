@@ -1,4 +1,5 @@
 "use client";
+import { BACKEND_URL } from "@/lib/backend";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -44,7 +45,7 @@ export default function LoginForm() {
 
     console.log("Submitting login form with data:", data);
     try {
-      const result = await fetch(`http://localhost:8088/api/users/login`, {
+      const result = await fetch(`${BACKEND_URL}/api/users/login`, {
         body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json",

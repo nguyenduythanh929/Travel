@@ -1,3 +1,4 @@
+import { BACKEND_URL } from "@/lib/backend";
 import type { BookingItem } from "@/app/api/bookingApi";
 
 type TourListProps = {
@@ -33,7 +34,7 @@ export default function TourList({ tours }: TourListProps) {
 
           {/* Ảnh tour */}
           <img
-            src={`http://localhost:8088/api/tours/images/${t.tourImage}`}
+            src={`${BACKEND_URL}/api/tours/images/${t.tourImage}`}
             alt={t.tourName}
             className="w-20 h-20 rounded-md object-cover border"
           />

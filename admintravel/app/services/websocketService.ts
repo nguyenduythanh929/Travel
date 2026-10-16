@@ -1,8 +1,9 @@
+import { BACKEND_URL } from "@/lib/backend";
 import { Client, IMessage, StompSubscription } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { BookingNotification, useNotificationStore } from "../store/notificationStore";
 
-const WEBSOCKET_URL = "http://localhost:8088/ws";
+const WEBSOCKET_URL = `${BACKEND_URL}/ws`;
 
 class WebSocketService {
   private client: Client | null = null;

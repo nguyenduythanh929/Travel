@@ -1,3 +1,4 @@
+import { BACKEND_URL } from "@/lib/backend";
 // src/api/tourTypeApi.ts
 // Service để gọi API Tour Types từ backend Spring Boot
 
@@ -5,7 +6,7 @@ import axios from "axios";
 
 // Lấy URL từ environment variables
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8088/api";
+  process.env.NEXT_PUBLIC_API_URL || `${BACKEND_URL}/api`;
 
 // Tạo axios instance
 const api = axios.create({

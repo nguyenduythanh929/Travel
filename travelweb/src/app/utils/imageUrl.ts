@@ -1,5 +1,6 @@
+import { BACKEND_URL } from "@/lib/backend";
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8088/api/tours";
+  process.env.NEXT_PUBLIC_API_URL || `${BACKEND_URL}/api/tours`;
 
 export function getImageUrl(url: string | undefined | null): string {
   if (!url) {

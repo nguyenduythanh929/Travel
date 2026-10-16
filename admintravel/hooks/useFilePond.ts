@@ -1,3 +1,4 @@
+import { BACKEND_URL } from "@/lib/backend";
 import { useEffect, useRef, useCallback } from "react";
 
 
@@ -57,7 +58,7 @@ export const useFilePond = (options: UseFilePondOptions = {}) => {
       isInitializedRef.current = true;
 
       const API_BASE_URL =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:8088/api";
+        process.env.NEXT_PUBLIC_API_URL || `${BACKEND_URL}/api`;
 
       pondRef.current = FilePond.create(elementRef.current, {
         labelIdle: "+",

@@ -1,9 +1,10 @@
+import { BACKEND_URL } from "@/lib/backend";
 export const dynamic = "force-dynamic";
 
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8088",
+  baseURL: `${BACKEND_URL}`,
   withCredentials: true,
 });
 

@@ -1,4 +1,5 @@
 "use client";
+import { BACKEND_URL } from "@/lib/backend";
 
 import { useEffect, useState, useMemo } from "react";
 import { useAppContext } from "@/app/AppProvider";
@@ -49,7 +50,7 @@ export default function CartClient() {
 
   async function loadData() {
     const res = await fetch(
-      `http://localhost:8088/api/cart/user/${userId}`,
+      `${BACKEND_URL}/api/cart/user/${userId}`,
       { cache: "no-store", credentials: "include" }
     );
     const result: CartData = await res.json();

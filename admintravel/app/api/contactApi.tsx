@@ -1,5 +1,6 @@
+import { BACKEND_URL } from "@/lib/backend";
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8088/api/contacts";
+  process.env.NEXT_PUBLIC_API_URL || `${BACKEND_URL}/api/contacts`;
 
 // Backend returns LocalDateTime as array: [year, month, day, hour, minute, second, nano]
 export type DateArray = number[];
