@@ -56,41 +56,13 @@ export default function RegisterForm() {
       //   }
       // });
 
-      const payload = await res.json();
+      // Error responses may have an empty or non-JSON body
+      const payload = await res.json().catch(() => null);
       console.log("Register Response:", payload);
 
       // 2️⃣ Kiểm tra kết quả đăng ký
       if (!res.ok) {
         throw new Error(`Register failed: ${res.status}`);
-      }
-
-      // 3️⃣ Lấy userId từ payload
-      const userId = payload?.id || payload?.userId;
-      if (!userId) {
-        throw new Error("Không tìm thấy userId trong payload đăng ký");
-      }
-
-      // 4️⃣ Tạo dữ liệu booking
-      const bookingData = {
-        userId: userId,
-        customerName: data.name,
-        paymentStatus: 0,
-        note: "Note",
-        status: 4,
-      };
-      const bookingRes = await fetch(`${BACKEND_URL}/api/bookings`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(bookingData),
-      });
-
-      const bookingPayload = await bookingRes.json();
-      console.log("Booking Response:", bookingPayload);
-
-      if (!bookingRes.ok) {
-        throw new Error(`Booking failed: ${bookingRes.status}`);
       }
 
       router.push("/login");
