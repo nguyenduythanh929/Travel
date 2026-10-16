@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const AppContext = createContext({
   sessionToken: "",
@@ -31,6 +31,16 @@ export default function AppProvider({
   const [sessionToken, setSessionToken] = useState(inittialToken || "");
   const [userId, setUserId] = useState(inittialUserId || "");
   const [cart, setCart] = useState({});
+
+  // useState only reads its initial value once. After login/logout,
+  // router.refresh() passes new cookie values here, so sync them into state.
+  useEffect(() => {
+    setSessionToken(inittialToken || "");
+  }, [inittialToken]);
+
+  useEffect(() => {
+    setUserId(inittialUserId || "");
+  }, [inittialUserId]);
 
   return (
     <AppContext.Provider

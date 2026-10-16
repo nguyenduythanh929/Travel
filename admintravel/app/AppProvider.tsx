@@ -47,6 +47,16 @@ export default function AppProvider({
     setupAxiosInterceptors();
   }, []);
 
+  // useState only reads its initial value once. After login/logout,
+  // router.refresh() passes new cookie values here, so sync them into state.
+  useEffect(() => {
+    setSessionToken(inittialToken || "");
+  }, [inittialToken]);
+
+  useEffect(() => {
+    setUserId(inittialUserId || "");
+  }, [inittialUserId]);
+
   return (
     <AppContext.Provider
       value={{
