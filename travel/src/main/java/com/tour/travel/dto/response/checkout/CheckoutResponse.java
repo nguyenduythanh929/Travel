@@ -30,16 +30,13 @@ public class CheckoutResponse {
     private LocalDateTime expirationTime;
     private LocalDateTime createdAt;
 
-    // Payment info
     private String paymentUrl;
     private String paymentMethod;
 
-    // Customer info
     private String customerName;
     private String customerPhone;
     private String customerEmail;
 
-    // Summary
     private Integer totalAdults;
     private Integer totalChildren;
     private Integer totalInfants;

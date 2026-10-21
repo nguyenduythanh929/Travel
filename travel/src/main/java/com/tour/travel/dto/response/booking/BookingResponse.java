@@ -40,31 +40,24 @@ public class BookingResponse extends BaseResponse {
     private String note;
     private String specialRequests;
 
-    // Timestamps
     private LocalDateTime expirationTime;
     private LocalDateTime paidAt;
     private LocalDateTime completedAt;
     private LocalDateTime cancelledAt;
 
-    // Cancellation info
     private String cancellationReason;
     private String cancelledBy;
 
-    // Staff info (for cash payment confirmation)
     private String confirmedByStaff;
 
-    // Summary totals
     private Integer totalAdults;
     private Integer totalChildren;
     private Integer totalInfants;
     private Integer totalPassengers;
 
-    // Capacity tracking
     private Boolean capacityDeducted;
 
-    // Helper flags
     private Boolean isExpired;
     private Boolean canCancel;
     private Boolean canPay;
 }
-

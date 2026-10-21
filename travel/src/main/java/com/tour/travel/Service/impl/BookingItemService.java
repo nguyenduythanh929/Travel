@@ -29,7 +29,6 @@ public class BookingItemService implements IBookingItemService {
     @Override
     @Transactional(readOnly = true)
     public List<BookingItemResponse> getByBookingId(Integer bookingId) {
-        // Verify booking exists
         bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new DataNotFoundException("Booking not found with id: " + bookingId));
 

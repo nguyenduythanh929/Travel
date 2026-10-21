@@ -143,7 +143,6 @@ public class VoucherService implements IVoucherService {
     @Override
     @Transactional
     public VoucherResponse createVoucher(VoucherRequest request) {
-        // Check if voucher code already exists
         if (voucherRepository.findByCode(request.getCode()).isPresent()) {
             throw new IllegalArgumentException("Mã voucher đã tồn tại");
         }

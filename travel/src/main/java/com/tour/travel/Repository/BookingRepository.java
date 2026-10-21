@@ -15,7 +15,6 @@ import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<BookingEntity, Integer> {
 
-    // ==================== SEARCH AND FILTER ====================
 
     @Query("""
         SELECT b FROM BookingEntity b
@@ -38,11 +37,9 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
             Pageable pageable
     );
 
-    // ==================== FIND BY CODE ====================
 
     Optional<BookingEntity> findByBookingCode(String bookingCode);
 
-    // ==================== USER BOOKINGS ====================
 
     Optional<BookingEntity> findByUser_IdAndStatus(Integer userId, Integer status);
 
@@ -52,13 +49,11 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
 
     Page<BookingEntity> findByUserId(Integer userId, Pageable pageable);
 
-    // ==================== STATUS QUERIES ====================
 
     Page<BookingEntity> findByStatus(Integer status, Pageable pageable);
 
     List<BookingEntity> findByStatus(Integer status);
 
-    // ==================== EXPIRATION QUERIES ====================
 
     /**
      * Find bookings that are PENDING_PAYMENT and past expiration time.
@@ -91,7 +86,6 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
             Pageable pageable
     );
 
-    // ==================== COMPLETION QUERIES ====================
 
     /**
      * Find PAID bookings that might be completed.
@@ -100,7 +94,6 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
     @Query("SELECT b FROM BookingEntity b WHERE b.status = :status")
     List<BookingEntity> findPaidBookings(@Param("status") Integer status);
 
-    // ==================== REVENUE QUERIES ====================
 
     @Query("SELECT COALESCE(SUM(b.finalPrice), 0.0) FROM BookingEntity b WHERE b.paymentStatus = :paymentStatus")
     Double getTotalRevenue(@Param("paymentStatus") Integer paymentStatus);
@@ -120,7 +113,6 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
             @Param("endDate") LocalDateTime endDate
     );
 
-    // ==================== COMPLETED BOOKING CHECK ====================
 
     @Query("""
         SELECT CASE WHEN COUNT(b) > 0 THEN true ELSE false END
@@ -136,7 +128,6 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
             @Param("completedStatus") Integer completedStatus
     );
 
-    // ==================== BATCH UPDATE ====================
 
     @Modifying
     @Query("""
@@ -152,7 +143,6 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Integer>
             @Param("now") LocalDateTime now
     );
 
-    // ==================== STATISTICS ====================
 
     @Query("SELECT COUNT(b) FROM BookingEntity b WHERE b.status = :status")
     long countByStatus(@Param("status") Integer status);

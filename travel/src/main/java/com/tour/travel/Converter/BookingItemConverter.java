@@ -26,7 +26,6 @@ public class BookingItemConverter {
         item.setInfantCount(infantCount);
         item.setDepartureLocation(request.getDepartureLocation());
 
-        // Set prices from tour
         double priceAdult = tour.getPriceAdult() != null ? tour.getPriceAdult() : 0.0;
         double priceChild = tour.getPriceChild() != null ? tour.getPriceChild() : 0.0;
         double priceInfant = tour.getPriceInfant() != null ? tour.getPriceInfant() : 0.0;
@@ -35,7 +34,6 @@ public class BookingItemConverter {
         item.setPriceChild(priceChild);
         item.setPriceInfant(priceInfant);
 
-        // Calculate subtotal
         double subtotal = priceAdult * adultCount + priceChild * childCount + priceInfant * infantCount;
         item.setSubtotal(subtotal);
 
@@ -47,7 +45,6 @@ public class BookingItemConverter {
 
         TourEntity tour = item.getTour();
 
-        // Get departure date with null safety
         LocalDate departureDate = item.getDepartureDate();
         if (departureDate == null && tour != null && tour.getDepartureDates() != null && !tour.getDepartureDates().isEmpty()) {
             departureDate = tour.getDepartureDates().get(0).getDate();

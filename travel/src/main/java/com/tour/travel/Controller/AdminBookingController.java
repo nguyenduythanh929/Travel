@@ -17,11 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.Map;
 
-/**
- * REST Controller for admin/staff booking management.
- * Provides endpoints for cash payment confirmation, booking cancellation,
- * and viewing bookings by various criteria.
- */
+
 @RestController
 @RequestMapping("/api/admin/bookings")
 @RequiredArgsConstructor
@@ -29,10 +25,6 @@ public class AdminBookingController {
 
     private final IBookingService bookingService;
 
-    /**
-     * Confirm cash payment by staff (offline payment).
-     * This will mark the booking as PAID and deduct tour capacity.
-     */
     @PostMapping("/confirm-cash-payment")
     public ResponseEntity<?> confirmCashPayment(@Valid @RequestBody ConfirmCashPaymentRequest request) {
         try {
@@ -49,10 +41,7 @@ public class AdminBookingController {
         }
     }
 
-    /**
-     * Cancel a booking by admin.
-     * This will restore tour capacity if the booking was paid.
-     */
+
     @PostMapping("/cancel")
     public ResponseEntity<?> cancelBooking(@Valid @RequestBody CancelBookingRequest request) {
         try {
@@ -69,9 +58,6 @@ public class AdminBookingController {
         }
     }
 
-    /**
-     * Mark a booking as completed.
-     */
     @PostMapping("/{bookingId}/complete")
     public ResponseEntity<?> completeBooking(@PathVariable Integer bookingId) {
         try {
@@ -84,16 +70,13 @@ public class AdminBookingController {
         }
     }
 
-    /**
-     * Get all bookings with a specific status.
-     */
+
     @GetMapping("/status/{status}")
     public ResponseEntity<?> getBookingsByStatus(
             @PathVariable Integer status,
             @RequestParam(defaultValue = "0") int offset,
             @RequestParam(defaultValue = "10") int limit) {
         try {
-            // Validate status is a valid BookingStatus value
             boolean validStatus = Arrays.stream(BookingStatus.values())
                     .anyMatch(s -> s.getValue() == status);
             if (!validStatus) {
@@ -109,9 +92,6 @@ public class AdminBookingController {
         }
     }
 
-    /**
-     * Get all pending payment bookings.
-     */
     @GetMapping("/pending-payment")
     public ResponseEntity<?> getPendingPaymentBookings(
             @RequestParam(defaultValue = "0") int offset,
@@ -127,9 +107,7 @@ public class AdminBookingController {
         }
     }
 
-    /**
-     * Get bookings expiring soon (within specified hours).
-     */
+
     @GetMapping("/expiring-soon")
     public ResponseEntity<?> getBookingsExpiringSoon(
             @RequestParam(defaultValue = "6") int hours,
@@ -149,9 +127,7 @@ public class AdminBookingController {
         }
     }
 
-    /**
-     * Get a single booking by ID.
-     */
+
     @GetMapping("/{bookingId}")
     public ResponseEntity<?> getBooking(@PathVariable Integer bookingId) {
         try {
@@ -164,9 +140,7 @@ public class AdminBookingController {
         }
     }
 
-    /**
-     * Get a single booking by booking code.
-     */
+
     @GetMapping("/code/{bookingCode}")
     public ResponseEntity<?> getBookingByCode(@PathVariable String bookingCode) {
         try {
@@ -182,9 +156,7 @@ public class AdminBookingController {
         }
     }
 
-    /**
-     * Manually expire a booking (for testing or admin override).
-     */
+
     @PostMapping("/{bookingId}/expire")
     public ResponseEntity<?> expireBooking(@PathVariable Integer bookingId) {
         try {
@@ -197,9 +169,7 @@ public class AdminBookingController {
         }
     }
 
-    /**
-     * Run manual expiration check (for testing or admin use).
-     */
+
     @PostMapping("/run-expiration-check")
     public ResponseEntity<?> runExpirationCheck() {
         try {
@@ -215,9 +185,6 @@ public class AdminBookingController {
         }
     }
 
-    /**
-     * Get booking status options.
-     */
     @GetMapping("/status-options")
     public ResponseEntity<Map<String, Object>> getStatusOptions() {
         var statuses = Arrays.stream(BookingStatus.values())

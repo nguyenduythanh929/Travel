@@ -55,7 +55,6 @@ public class BookingService implements IBookingService {
         BookingEntity booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new DataNotFoundException("Booking not found with id: " + bookingId));
 
-        // Only allow updates for PENDING_PAYMENT bookings
         if (booking.getStatus() != BookingStatus.PENDING_PAYMENT.getValue()) {
             throw new RuntimeException("Cannot update booking. Only pending payment bookings can be updated.");
         }
@@ -80,7 +79,6 @@ public class BookingService implements IBookingService {
                 .sum();
         booking.setTotalPrice(totalPrice);
 
-        // Handle voucher changes
         if (request.getVoucherCode() != null && !request.getVoucherCode().isEmpty()) {
             if (booking.getVoucherCode() == null || !booking.getVoucherCode().equals(request.getVoucherCode())) {
                 VoucherEntity oldVoucher = booking.getVoucher();
@@ -142,7 +140,6 @@ public class BookingService implements IBookingService {
 
     @Override
     public BookingResponse getBookingByUserId(Integer userId) {
-        // Get the most recent pending payment booking for the user
         BookingEntity entity = bookingRepository.findByUser_IdAndStatus(userId, BookingStatus.PENDING_PAYMENT.getValue())
                 .orElseThrow(() -> new DataNotFoundException("No pending booking found for user"));
         return toEnhancedResponse(entity);
@@ -178,7 +175,6 @@ public class BookingService implements IBookingService {
         BookingEntity booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new DataNotFoundException("Booking not found with id: " + bookingId));
 
-        // Only allow deletion of PENDING_PAYMENT or CANCELLED bookings
         if (booking.getStatus() != BookingStatus.PENDING_PAYMENT.getValue()
                 && booking.getStatus() != BookingStatus.CANCELLED.getValue()
                 && booking.getStatus() != BookingStatus.EXPIRED.getValue()) {
@@ -187,8 +183,6 @@ public class BookingService implements IBookingService {
 
         bookingRepository.delete(booking);
     }
-
-    // ==================== BOOKING MANAGEMENT METHODS ====================
 
     @Override
     public BookingResponse getBookingByCode(String bookingCode) {
@@ -203,18 +197,15 @@ public class BookingService implements IBookingService {
         BookingEntity booking = bookingRepository.findById(request.getBookingId())
                 .orElseThrow(() -> new DataNotFoundException("Booking not found"));
 
-        // Validate booking status
         if (booking.getStatus() != BookingStatus.PENDING_PAYMENT.getValue()) {
             throw new RuntimeException("Booking is not in PENDING_PAYMENT status. Current status: " +
                     BookingStatus.fromValue(booking.getStatus()).getDescription());
         }
 
-        // Check if booking is expired
         if (booking.isExpired()) {
             throw new RuntimeException("Booking has expired and cannot accept payment");
         }
 
-        // Update booking status to PAID
         booking.setStatus(BookingStatus.PAID.getValue());
         booking.setPaymentStatus(PaymentStatus.SUCCESS.getValue());
         booking.setPaidAt(LocalDateTime.now());
@@ -225,14 +216,12 @@ public class BookingService implements IBookingService {
             booking.setNote(existingNote + "[Staff Note] " + request.getStaffNote());
         }
 
-        // Deduct tour capacity
         deductTourCapacity(booking);
         booking.setCapacityDeducted(true);
 
         BookingEntity saved = bookingRepository.save(booking);
         log.info("Cash payment confirmed for booking {} by staff {}", booking.getBookingCode(), staffUsername);
 
-        // Notify user about payment confirmation
         notificationService.notifyUserPaymentConfirmed(saved, staffUsername);
 
         return toEnhancedResponse(saved);
@@ -244,12 +233,10 @@ public class BookingService implements IBookingService {
         BookingEntity booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new DataNotFoundException("Booking not found"));
 
-        // Update booking status to PAID
         booking.setStatus(BookingStatus.PAID.getValue());
         booking.setPaymentStatus(PaymentStatus.SUCCESS.getValue());
         booking.setPaidAt(LocalDateTime.now());
 
-        // Deduct tour capacity
         if (!Boolean.TRUE.equals(booking.getCapacityDeducted())) {
             deductTourCapacity(booking);
             booking.setCapacityDeducted(true);
@@ -258,7 +245,6 @@ public class BookingService implements IBookingService {
         BookingEntity saved = bookingRepository.save(booking);
         log.info("Payment success processed for booking {}", booking.getBookingCode());
 
-        // Notify user about successful payment
         notificationService.notifyUserBookingStatusChange(saved,
                 "Your payment for booking " + saved.getBookingCode() + " has been successfully processed. Thank you!");
 
@@ -271,7 +257,6 @@ public class BookingService implements IBookingService {
         BookingEntity booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new DataNotFoundException("Booking not found"));
 
-        // Update payment status to FAILED (keep booking status as PENDING_PAYMENT)
         booking.setPaymentStatus(PaymentStatus.FAILED.getValue());
 
         String existingNote = booking.getNote() != null ? booking.getNote() + "\n" : "";
@@ -289,7 +274,6 @@ public class BookingService implements IBookingService {
         BookingEntity booking = bookingRepository.findById(request.getBookingId())
                 .orElseThrow(() -> new DataNotFoundException("Booking not found"));
 
-        // Validate booking can be cancelled
         if (booking.getStatus() == BookingStatus.CANCELLED.getValue()) {
             throw new RuntimeException("Booking is already cancelled");
         }
@@ -300,19 +284,16 @@ public class BookingService implements IBookingService {
             throw new RuntimeException("Cannot cancel an expired booking");
         }
 
-        // Restore tour capacity if it was deducted (booking was paid)
         if (Boolean.TRUE.equals(booking.getCapacityDeducted())) {
             restoreTourCapacity(booking);
             booking.setCapacityDeducted(false);
         }
 
-        // Update booking status
         booking.setStatus(BookingStatus.CANCELLED.getValue());
         booking.setCancelledAt(LocalDateTime.now());
         booking.setCancelledBy(cancelledBy);
         booking.setCancellationReason(request.getReason());
 
-        // If voucher was used, decrement usage count
         if (booking.getVoucher() != null) {
             voucherService.decrementUsageCount(booking.getVoucher());
         }
@@ -320,7 +301,6 @@ public class BookingService implements IBookingService {
         BookingEntity saved = bookingRepository.save(booking);
         log.info("Booking {} cancelled by {}", booking.getBookingCode(), cancelledBy);
 
-        // Notify user about booking cancellation
         notificationService.notifyUserBookingCancelled(saved, request.getReason(), cancelledBy);
 
         return toEnhancedResponse(saved);
@@ -332,7 +312,6 @@ public class BookingService implements IBookingService {
         BookingEntity booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new DataNotFoundException("Booking not found"));
 
-        // Only PAID bookings can be completed
         if (booking.getStatus() != BookingStatus.PAID.getValue()) {
             throw new RuntimeException("Only paid bookings can be marked as completed");
         }
@@ -343,7 +322,6 @@ public class BookingService implements IBookingService {
         BookingEntity saved = bookingRepository.save(booking);
         log.info("Booking {} marked as completed", booking.getBookingCode());
 
-        // Notify user about booking completion
         notificationService.notifyUserBookingCompleted(saved);
 
         return toEnhancedResponse(saved);
@@ -355,7 +333,6 @@ public class BookingService implements IBookingService {
         BookingEntity booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new DataNotFoundException("Booking not found"));
 
-        // Only PENDING_PAYMENT bookings can be expired
         if (booking.getStatus() != BookingStatus.PENDING_PAYMENT.getValue()) {
             throw new RuntimeException("Only pending payment bookings can be expired");
         }
@@ -365,7 +342,6 @@ public class BookingService implements IBookingService {
         booking.setCancelledBy("SYSTEM");
         booking.setCancellationReason("Booking expired due to payment timeout");
 
-        // If voucher was used, decrement usage count
         if (booking.getVoucher() != null) {
             voucherService.decrementUsageCount(booking.getVoucher());
         }
@@ -373,7 +349,6 @@ public class BookingService implements IBookingService {
         BookingEntity saved = bookingRepository.save(booking);
         log.info("Booking {} expired", booking.getBookingCode());
 
-        // Notify user about booking expiration
         notificationService.notifyUserBookingExpired(saved);
 
         return toEnhancedResponse(saved);
@@ -552,50 +527,38 @@ public class BookingService implements IBookingService {
                 .build();
     }
 
-    // ==================== HELPER METHODS ====================
-
     private BookingResponse toEnhancedResponse(BookingEntity entity) {
         BookingResponse response = bookingConverter.toResponse(entity);
 
-        // Add status descriptions
         response.setStatusDescription(entity.getBookingStatus().getDescription());
         response.setPaymentStatusDescription(entity.getPaymentStatusEnum().getDescription());
 
-        // Add booking code
         response.setBookingCode(entity.getBookingCode());
 
-        // Add timestamps
         response.setCreatedAt(entity.getCreatedAt());
         response.setExpirationTime(entity.getExpirationTime());
         response.setPaidAt(entity.getPaidAt());
         response.setCompletedAt(entity.getCompletedAt());
         response.setCancelledAt(entity.getCancelledAt());
 
-        // Add cancellation info
         response.setCancellationReason(entity.getCancellationReason());
         response.setCancelledBy(entity.getCancelledBy());
 
-        // Add staff info
         response.setConfirmedByStaff(entity.getConfirmedByStaff());
 
-        // Add totals
         response.setTotalAdults(entity.getTotalAdults());
         response.setTotalChildren(entity.getTotalChildren());
         response.setTotalInfants(entity.getTotalInfants());
         response.setTotalPassengers(entity.getTotalPassengers());
 
-        // Add capacity tracking
         response.setCapacityDeducted(entity.getCapacityDeducted());
 
-        // Add customer info
         response.setCustomerEmail(entity.getCustomerEmail());
         response.setCustomerAddress(entity.getCustomerAddress());
         response.setSpecialRequests(entity.getSpecialRequests());
 
-        // Add payment method name
         response.setPaymentMethodName(entity.getPaymentMethod() != null ? entity.getPaymentMethod().getName() : null);
 
-        // Add helper flags
         response.setIsExpired(entity.isExpired());
         response.setCanCancel(canCancelBooking(entity));
         response.setCanPay(canPayBooking(entity));
@@ -613,4 +576,3 @@ public class BookingService implements IBookingService {
                !booking.isExpired();
     }
 }
-

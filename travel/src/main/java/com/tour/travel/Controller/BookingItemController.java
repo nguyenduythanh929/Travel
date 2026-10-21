@@ -10,11 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Controller for reading booking items.
- * BookingItems are created only during checkout and are immutable afterward.
- * All cart operations (add/update/delete) are handled by CartController.
- */
+
 @RestController
 @RequestMapping("/api/booking-items")
 @RequiredArgsConstructor

@@ -19,10 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-/**
- * REST Controller for user booking operations.
- * Bookings are created during checkout and represent official orders.
- */
+
 @RestController
 @RequestMapping("/api/bookings")
 @RequiredArgsConstructor

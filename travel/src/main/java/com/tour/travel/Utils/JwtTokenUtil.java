@@ -23,20 +23,18 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtTokenUtil {
     @Value("${jwt.expiration}")
-    private int expiration; //save to an environment variable
+    private int expiration;
 
     @Value("${jwt.secretKey}")
     private String secretKey;
     public String generateToken(UserEntity user) throws Exception{
-        //properties => claims
         Map<String, Object> claims = new HashMap<>();
-        //this.generateSecretKey();
         claims.put("email", user.getEmail());
         try {
             String token = Jwts.builder()
-                    .setClaims(claims)//how to extract claims from this ?  Payload
+                    .setClaims(claims)
                     .setSubject(user.getEmail())
-                    .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000L)) //30 ngày
+                    .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000L))
                     .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                     .compact();
             return token;
@@ -51,13 +49,6 @@ public class JwtTokenUtil {
     }
 
 
-//    private String generateSecretKey() {
-//        SecureRandom random = new SecureRandom();
-//        byte[] keyBytes = new byte[32]; // 256-bit key
-//        random.nextBytes(keyBytes);
-//        String secretKey = Encoders.BASE64.encode(keyBytes);
-//        return secretKey;
-//    }
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSignInKey())
@@ -71,7 +62,6 @@ public class JwtTokenUtil {
         return claimsResolver.apply(claims);
     }
 
-    //check expiration
     public boolean isTokenExpired(String token) {
         Date expirationDate = this.extractClaim(token, Claims::getExpiration);
         return expirationDate.before(new Date());
@@ -82,6 +72,6 @@ public class JwtTokenUtil {
     public boolean validateToken(String token, UserDetails userDetails) {
         String email = extractEmail(token);
         return (email.equals(userDetails.getUsername()))
-                && !isTokenExpired(token); //check hạn của token
+                && !isTokenExpired(token);
     }
 }

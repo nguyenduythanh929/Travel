@@ -16,17 +16,6 @@ public class DashboardController {
 
     private final IDashboardService dashboardService;
 
-    /**
-     * Lấy dữ liệu tổng quan cho dashboard
-     *
-     * @param startDate Ngày bắt đầu (optional) - format: yyyy-MM-dd'T'HH:mm:ss
-     * @param endDate Ngày kết thúc (optional) - format: yyyy-MM-dd'T'HH:mm:ss
-     * @return DashboardResponse chứa: totalUsers, totalBookings, totalRevenue, revenueByDate
-     *
-     * Ví dụ:
-     * GET /api/dashboard
-     * GET /api/dashboard?startDate=2025-09-01T00:00:00&endDate=2025-10-31T23:59:59
-     */
     @GetMapping
     public ResponseEntity<DashboardResponse> getDashboardData(
             @RequestParam(required = false)

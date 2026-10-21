@@ -34,7 +34,6 @@ public class BookingNotificationDTO {
 
     private LocalDateTime timestamp;
 
-    // Additional fields for richer notifications
     private String customerName;
 
     private Double totalAmount;

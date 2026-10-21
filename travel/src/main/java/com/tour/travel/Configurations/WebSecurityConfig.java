@@ -39,7 +39,6 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(requests -> {requests
-                        // ============ PUBLIC ENDPOINTS ============
                         .requestMatchers(
                                 "api/users/register",
                                 "api/users/login",
@@ -68,10 +67,8 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "api/vouchers/{code}").permitAll()
                         .requestMatchers(HttpMethod.GET, "api/tinymce/images/**").permitAll()
 
-                        // ============ DASHBOARD ============
                         .requestMatchers("api/dashboard/**").hasAuthority("DASHBOARD_VIEW")
 
-                        // ============ USER ============
                         .requestMatchers(HttpMethod.GET, "api/users/*").authenticated()
                         .requestMatchers(HttpMethod.GET, "api/users").hasAuthority("USER_VIEW")
                         .requestMatchers(HttpMethod.GET, "api/users/search").hasAuthority("USER_VIEW")
@@ -82,7 +79,6 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "api/users/change-password/{id}").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "api/users").hasAuthority("USER_DELETE")
 
-                        // ============ TOUR (Admin) ============
                         .requestMatchers(HttpMethod.GET, "api/tours/admin").hasAuthority("TOUR_VIEW")
                         .requestMatchers(HttpMethod.GET, "api/tours/admin/{id}").hasAuthority("TOUR_VIEW")
                         .requestMatchers(HttpMethod.POST, "api/tours/create").hasAuthority("TOUR_CREATE")
@@ -90,13 +86,11 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "api/tours/{id}").hasAuthority("TOUR_EDIT")
                         .requestMatchers(HttpMethod.DELETE, "api/tours/{id}").hasAuthority("TOUR_DELETE")
 
-                        // ============ TOUR TYPE (Admin) ============
                         .requestMatchers(HttpMethod.GET, "api/tour_types/search").hasAuthority("TOUR_TYPE_VIEW")
                         .requestMatchers(HttpMethod.POST, "api/tour_types").hasAuthority("TOUR_TYPE_CREATE")
                         .requestMatchers(HttpMethod.PUT, "api/tour_types/{id}").hasAuthority("TOUR_TYPE_EDIT")
                         .requestMatchers(HttpMethod.DELETE, "api/tour_types/{id}").hasAuthority("TOUR_TYPE_DELETE")
 
-                        // ============ BOOKING ============
                         .requestMatchers(HttpMethod.POST, "api/bookings").authenticated()
                         .requestMatchers(HttpMethod.GET, "api/bookings/user/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "api/bookings").hasAuthority("BOOKING_VIEW")
@@ -105,29 +99,24 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "api/bookings/{id}").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "api/bookings/{id}").hasAuthority("BOOKING_DELETE")
 
-                        // ============ BOOKING ITEM ============
                         .requestMatchers(HttpMethod.GET, "api/booking-items/booking/{bookingId}").authenticated()
                         .requestMatchers(HttpMethod.POST, "api/booking-items").authenticated()
                         .requestMatchers(HttpMethod.PUT, "api/booking-items/{id}").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "api/booking-items/{id}").authenticated()
 
-                        // ============ ROLE ============
                         .requestMatchers(HttpMethod.GET, "api/roles/**").hasAuthority("ROLE_VIEW")
                         .requestMatchers(HttpMethod.POST, "api/roles").hasAuthority("ROLE_CREATE")
                         .requestMatchers(HttpMethod.PUT, "api/roles/{id}").hasAuthority("ROLE_EDIT")
                         .requestMatchers(HttpMethod.DELETE, "api/roles/**").hasAuthority("ROLE_DELETE")
 
-                        // ============ VOUCHER ============
                         .requestMatchers(HttpMethod.GET, "api/vouchers").hasAuthority("VOUCHER_VIEW")
                         .requestMatchers(HttpMethod.POST, "api/vouchers").hasAuthority("VOUCHER_CREATE")
                         .requestMatchers(HttpMethod.POST, "api/vouchers/bookings/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "api/vouchers/bookings/**").authenticated()
 
-                        // ============ CONTACT ============
                         .requestMatchers(HttpMethod.GET, "api/contacts").hasAuthority("CONTACT_VIEW")
                         .requestMatchers(HttpMethod.DELETE, "api/contacts/**").hasAuthority("CONTACT_DELETE")
 
-                        // ============ REVIEW ============
                         .requestMatchers(HttpMethod.POST, "api/reviews").authenticated()
                         .requestMatchers(HttpMethod.PUT, "api/reviews/{id}").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "api/reviews/{id}").hasAuthority("REVIEW_DELETE")
@@ -135,16 +124,12 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "api/reviews/my-reviews").authenticated()
                         .requestMatchers(HttpMethod.GET, "api/reviews/check/**").authenticated()
 
-                        // ============ WEBSITE SETTING ============
                         .requestMatchers(HttpMethod.PUT, "api/website-settings").hasAuthority("SETTING_EDIT")
 
-                        // ============ VNPAY ============
                         .requestMatchers(HttpMethod.POST, "api/vnpay/create-payment").authenticated()
 
-                        // ============ TINYMCE ============
                         .requestMatchers(HttpMethod.POST, "api/tinymce/upload").authenticated()
 
-                        // ============ DEFAULT ============
                         .anyRequest().authenticated();
                 });
         http.cors(new Customizer<CorsConfigurer<HttpSecurity>>() {

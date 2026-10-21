@@ -47,14 +47,12 @@ public class BookingConverter {
     public BookingResponse toResponse(BookingEntity bookingEntity) {
         if (bookingEntity == null) return null;
 
-        // Handle items with null safety
         List<BookingItemResponse> itemResponses = bookingEntity.getItems() != null
                 ? bookingEntity.getItems().stream()
                     .map(bookingItemConverter::toResponse)
                     .toList()
                 : Collections.emptyList();
 
-        // Get payment methods
         List<PaymentMethodResponse> methods = paymentMethodRepository.findAll()
                 .stream()
                 .map(method -> new PaymentMethodResponse(
@@ -63,12 +61,10 @@ public class BookingConverter {
                 ))
                 .toList();
 
-        // Handle null values for prices
         double totalPrice = bookingEntity.getTotalPrice() != null ? bookingEntity.getTotalPrice() : 0.0;
         double discount = bookingEntity.getDiscount() != null ? bookingEntity.getDiscount() : 0.0;
         double finalPrice = bookingEntity.getFinalPrice() != null ? bookingEntity.getFinalPrice() : 0.0;
 
-        // Build voucher response if voucher exists
         VoucherResponse voucherResponse = null;
         if (bookingEntity.getVoucher() != null) {
             VoucherEntity voucher = bookingEntity.getVoucher();

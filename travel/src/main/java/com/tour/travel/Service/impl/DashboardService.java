@@ -25,14 +25,12 @@ public class DashboardService implements IDashboardService {
     public DashboardResponse getDashboardData(LocalDateTime startDate, LocalDateTime endDate) {
         Long totalUsers = userRepository.count();
         Long totalBookings = bookingRepository.count();
-        // Get total revenue from successful payments only
         Double totalRevenue = bookingRepository.getTotalRevenue(PaymentStatus.SUCCESS.getValue());
         List<RevenueByDateDTO> revenueByDate = getRevenueByDateList(startDate, endDate);
         return new DashboardResponse(totalUsers, totalBookings, totalRevenue, revenueByDate);
     }
 
     private List<RevenueByDateDTO> getRevenueByDateList(LocalDateTime startDate, LocalDateTime endDate) {
-        // Get revenue by date from successful payments only
         List<Object[]> results = bookingRepository.getRevenueByDate(PaymentStatus.SUCCESS.getValue(), startDate, endDate);
         List<RevenueByDateDTO> revenueList = new ArrayList<>();
         for (Object[] result : results) {

@@ -12,14 +12,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Booking Entity - Created at checkout from cart items
- * Follows real-world tourism business standards:
- * - Starts with PENDING_PAYMENT status
- * - Supports online payment (VNPay) and cash (offline) payment
- * - Tour capacity deducted only after successful payment
- * - Automatic expiration handling for unpaid bookings
- */
 @Entity
 @Table(name = "bookings", indexes = {
     @Index(name = "idx_booking_user", columnList = "user_id"),
@@ -87,39 +79,30 @@ public class BookingEntity extends BaseEntity {
     @Column(name = "expiration_time")
     private LocalDateTime expirationTime;
 
-    // Timestamp when payment was confirmed (online or cash)
     @Column(name = "paid_at")
     private LocalDateTime paidAt;
 
-    // Timestamp when booking was marked as completed (after tour ends)
     @Column(name = "completed_at")
     private LocalDateTime completedAt;
 
-    // Timestamp when booking was cancelled
     @Column(name = "cancelled_at")
     private LocalDateTime cancelledAt;
 
-    // Reason for cancellation (if cancelled)
     @Column(name = "cancellation_reason", columnDefinition = "TEXT")
     private String cancellationReason;
 
-    // Who cancelled the booking (USER, ADMIN, SYSTEM)
     @Column(name = "cancelled_by", length = 50)
     private String cancelledBy;
 
-    // Staff who confirmed cash payment (for offline payments)
     @Column(name = "confirmed_by_staff")
     private String confirmedByStaff;
 
-    // Number of adults in all items (for quick reference)
     @Column(name = "total_adults")
     private Integer totalAdults = 0;
 
-    // Number of children in all items
     @Column(name = "total_children")
     private Integer totalChildren = 0;
 
-    // Number of infants in all items
     @Column(name = "total_infants")
     private Integer totalInfants = 0;
 
@@ -127,7 +110,6 @@ public class BookingEntity extends BaseEntity {
     @Column(name = "capacity_deducted")
     private Boolean capacityDeducted = false;
 
-    // Special requests from customer
     @Column(name = "special_requests", columnDefinition = "TEXT")
     private String specialRequests;
 
@@ -193,4 +175,3 @@ public class BookingEntity extends BaseEntity {
         return paymentStatus != null ? PaymentStatus.fromValue(paymentStatus) : PaymentStatus.PENDING;
     }
 }
-

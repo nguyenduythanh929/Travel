@@ -151,7 +151,6 @@ public class TourConverter {
     public TourEntity toEntity(Integer id, TourAdminRequest request) {
         TourEntity tour;
 
-        // CREATE / UPDATE
         if (id == null) {
             tour = new TourEntity();
             tour.setStatus(1); // default nếu cần
@@ -160,7 +159,6 @@ public class TourConverter {
                     .orElseThrow(() -> new RuntimeException("Không tìm thấy tour có id = " + id));
         }
 
-        // ===== BASIC FIELDS =====
         if (request.getName() != null)
             tour.setName(request.getName());
 
@@ -197,14 +195,12 @@ public class TourConverter {
         if (request.getStatus() != null)
             tour.setStatus(request.getStatus());
 
-        // ===== TOUR TYPE =====
         if (request.getTourTypeId() != null) {
             TourTypeEntity type = tourTypeRepository.findById(request.getTourTypeId())
                     .orElseThrow(() -> new RuntimeException("Tour type not found"));
             tour.setTourType(type);
         }
 
-        // ===== LOCATIONS =====
         if (request.getLocationIds() != null) {
             if (request.getLocationIds().isEmpty()) {
                 tour.getLocations().clear(); // cho phép xóa hết khi update
@@ -215,7 +211,6 @@ public class TourConverter {
             }
         }
 
-        // ===== DEPARTURE DATES =====
         if (request.getDepartureDates() != null) {
             List<DepartureDateEntity> allDates = new ArrayList<>();
 
@@ -235,7 +230,6 @@ public class TourConverter {
             tour.setDepartureDates(allDates); // replace cho cả create & update
         }
 
-        // ===== SCHEDULES =====
         if (request.getSchedules() != null && !request.getSchedules().isEmpty()) {
 
             if (id != null) {
@@ -251,7 +245,6 @@ public class TourConverter {
             }
         }
 
-        // ===== PROMOTION =====
         handleTourPromotion(tour, request);
 
         return tour;
@@ -395,4 +388,3 @@ public class TourConverter {
         }
     }
 }
-

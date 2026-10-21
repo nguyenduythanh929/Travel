@@ -45,11 +45,9 @@ public class CartService implements ICartService {
     @Override
     @Transactional
     public CartItemResponse addToCart(AddToCartRequest request) {
-        // Validate user exists
         UserEntity user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new DataNotFoundException("User not found with id: " + request.getUserId()));
 
-        // Validate tour exists and is active
         TourEntity tour = tourRepository.findById(request.getTourId())
                 .orElseThrow(() -> new DataNotFoundException("Tour not found with id: " + request.getTourId()));
 
@@ -57,15 +55,12 @@ public class CartService implements ICartService {
             throw new RuntimeException("Tour is not available for booking");
         }
 
-        // Get or create cart
         CartEntity cart = getOrCreateCart(request.getUserId());
 
-        // Check if tour already exists in cart
         CartItemEntity existingItem = cartItemRepository.findByCartIdAndTourId(cart.getId(), request.getTourId())
                 .orElse(null);
 
         if (existingItem != null) {
-            // Update existing item
             existingItem.setAdultCount((existingItem.getAdultCount() != null ? existingItem.getAdultCount() : 0) +
                     (request.getAdultCount() != null ? request.getAdultCount() : 0));
             existingItem.setChildCount((existingItem.getChildCount() != null ? existingItem.getChildCount() : 0) +
@@ -83,7 +78,6 @@ public class CartService implements ICartService {
                 existingItem.setSpecialRequests(request.getSpecialRequests());
             }
 
-            // Validate capacity
             validateCapacity(tour, existingItem);
 
             CartItemEntity saved = cartItemRepository.save(existingItem);
@@ -93,7 +87,6 @@ public class CartService implements ICartService {
             return toCartItemResponse(saved);
         }
 
-        // Create new cart item
         CartItemEntity cartItem = new CartItemEntity();
         cartItem.setCart(cart);
         cartItem.setTour(tour);
@@ -104,12 +97,10 @@ public class CartService implements ICartService {
         cartItem.setDepartureLocation(request.getDepartureLocation());
         cartItem.setSpecialRequests(request.getSpecialRequests());
 
-        // Set prices from tour
         cartItem.setPriceAdult(tour.getPriceAdult());
         cartItem.setPriceChild(tour.getPriceChild());
         cartItem.setPriceInfant(tour.getPriceInfant());
 
-        // Validate capacity
         validateCapacity(tour, cartItem);
 
         CartItemEntity saved = cartItemRepository.save(cartItem);
@@ -126,7 +117,6 @@ public class CartService implements ICartService {
         CartItemEntity cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new DataNotFoundException("Cart item not found with id: " + cartItemId));
 
-        // Verify ownership
         if (!cartItem.getCart().getUser().getId().equals(userId)) {
             throw new RuntimeException("Cart item does not belong to this user");
         }
@@ -150,12 +140,10 @@ public class CartService implements ICartService {
             cartItem.setSpecialRequests(request.getSpecialRequests());
         }
 
-        // Validate capacity
         validateCapacity(cartItem.getTour(), cartItem);
 
         CartItemEntity saved = cartItemRepository.save(cartItem);
 
-        // Update cart totals
         CartEntity cart = cartItem.getCart();
         cart.recalculateTotals();
         cartRepository.save(cart);
@@ -169,7 +157,6 @@ public class CartService implements ICartService {
         CartItemEntity cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new DataNotFoundException("Cart item not found with id: " + cartItemId));
 
-        // Verify ownership
         if (!cartItem.getCart().getUser().getId().equals(userId)) {
             throw new RuntimeException("Cart item does not belong to this user");
         }
@@ -246,17 +233,13 @@ public class CartService implements ICartService {
         for (CartItemEntity item : items) {
             TourEntity tour = item.getTour();
 
-            // Check tour status
             if (tour.getStatus() == null || tour.getStatus() != 1) {
                 throw new RuntimeException("Tour '" + tour.getName() + "' is not available for booking");
             }
 
-            // Check capacity
             validateCapacity(tour, item);
         }
     }
-
-    // ===================== PRIVATE HELPER METHODS =====================
 
     private CartEntity getOrCreateCart(Integer userId) {
         return cartRepository.findByUserIdWithItems(userId)

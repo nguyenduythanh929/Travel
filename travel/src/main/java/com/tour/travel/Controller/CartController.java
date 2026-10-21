@@ -13,11 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-/**
- * REST Controller for shopping cart management.
- * Cart is used for temporary purchase intent only - no payment or status logic.
- * Users can add tours to cart, update quantities, and select items for checkout.
- */
 @RestController
 @RequestMapping("/api/cart")
 @RequiredArgsConstructor
@@ -25,27 +20,18 @@ public class CartController {
 
     private final ICartService cartService;
 
-    /**
-     * Get the user's shopping cart.
-     */
     @GetMapping("/user/{userId}")
     public ResponseEntity<CartResponse> getCart(@PathVariable Integer userId) {
         CartResponse cart = cartService.getCartByUserId(userId);
         return ResponseEntity.ok(cart);
     }
 
-    /**
-     * Add a tour to the shopping cart.
-     */
     @PostMapping("/add")
     public ResponseEntity<CartItemResponse> addToCart(@Valid @RequestBody AddToCartRequest request) {
         CartItemResponse item = cartService.addToCart(request);
         return ResponseEntity.ok(item);
     }
 
-    /**
-     * Update a cart item (quantity, departure date, etc.).
-     */
     @PutMapping("/item/{cartItemId}/user/{userId}")
     public ResponseEntity<CartItemResponse> updateCartItem(
             @PathVariable Integer cartItemId,
@@ -55,9 +41,6 @@ public class CartController {
         return ResponseEntity.ok(item);
     }
 
-    /**
-     * Remove a specific item from the cart.
-     */
     @DeleteMapping("/item/{cartItemId}/user/{userId}")
     public ResponseEntity<Map<String, String>> removeCartItem(
             @PathVariable Integer cartItemId,
@@ -66,9 +49,6 @@ public class CartController {
         return ResponseEntity.ok(Map.of("message", "Item removed from cart successfully"));
     }
 
-    /**
-     * Remove multiple items from the cart.
-     */
     @DeleteMapping("/items/user/{userId}")
     public ResponseEntity<Map<String, String>> removeCartItems(
             @PathVariable Integer userId,
@@ -77,27 +57,18 @@ public class CartController {
         return ResponseEntity.ok(Map.of("message", "Items removed from cart successfully"));
     }
 
-    /**
-     * Clear all items from the user's cart.
-     */
     @DeleteMapping("/clear/user/{userId}")
     public ResponseEntity<Map<String, String>> clearCart(@PathVariable Integer userId) {
         cartService.clearCart(userId);
         return ResponseEntity.ok(Map.of("message", "Cart cleared successfully"));
     }
 
-    /**
-     * Get the number of items in the user's cart.
-     */
     @GetMapping("/count/user/{userId}")
     public ResponseEntity<Map<String, Integer>> getCartItemCount(@PathVariable Integer userId) {
         Integer count = cartService.getCartItemCount(userId);
         return ResponseEntity.ok(Map.of("count", count));
     }
 
-    /**
-     * Check if a tour is already in the user's cart.
-     */
     @GetMapping("/check/user/{userId}/tour/{tourId}")
     public ResponseEntity<Map<String, Boolean>> isTourInCart(
             @PathVariable Integer userId,
@@ -106,9 +77,6 @@ public class CartController {
         return ResponseEntity.ok(Map.of("inCart", inCart));
     }
 
-    /**
-     * Validate cart items before checkout.
-     */
     @PostMapping("/validate/user/{userId}")
     public ResponseEntity<Map<String, Object>> validateCartItemsForCheckout(
             @PathVariable Integer userId,
