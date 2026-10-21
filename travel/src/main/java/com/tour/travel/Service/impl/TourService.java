@@ -15,6 +15,7 @@ import com.tour.travel.Repository.TourScheduleRepository;
 import com.tour.travel.Service.ITourService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -24,6 +25,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TourService implements ITourService {
 
     private final TourRepository tourRepository;
@@ -165,7 +167,8 @@ public class TourService implements ITourService {
             tour.setEmbedding(embeddingJson);
             tourRepository.save(tour);
         } catch (Exception e) {
-            System.err.println("Failed to generate embedding for tour " + tour.getId() + ": " + e.getMessage());
+            log.error("Failed to generate embedding for tour {}. The tour was saved without an updated embedding.",
+                tour.getId(), e);
         }
     }
 }

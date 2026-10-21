@@ -17,6 +17,8 @@ import com.tour.travel.Repository.ChatConversationRepository;
 import com.tour.travel.Repository.TourRepository;
 import lombok.RequiredArgsConstructor;
 import okhttp3.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -33,6 +36,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ChatbotService {
 
+    private static final Logger logger = LoggerFactory.getLogger(ChatbotService.class);
     private final GeminiApiConfig geminiApiConfig;
     private final TourRepository tourRepository;
     private final TourConverter tourConverter;
@@ -43,10 +47,12 @@ public class ChatbotService {
         .connectTimeout(15, TimeUnit.SECONDS)
         .readTimeout(60, TimeUnit.SECONDS)
         .writeTimeout(15, TimeUnit.SECONDS)
+        .callTimeout(75, TimeUnit.SECONDS)
         .build();
 
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private static final int TOP_K_TOURS = 5;
+    static final int MAX_GEMINI_ATTEMPTS = 3;
     private static final String EMPTY_GEMINI_RESPONSE =
         "Xin lỗi, tôi không thể xử lý yêu cầu của bạn lúc này.";
 
@@ -151,8 +157,10 @@ public class ChatbotService {
             requestBody
         );
 
-        try (Response response = httpClient.newCall(request).execute()) {
+        try (Response response = executeGeminiRequest(request)) {
             if (!response.isSuccessful()) {
+                logger.error("Gemini request for model {} failed with HTTP status {}.",
+                    geminiApiConfig.getModel(), response.code());
                 throw new IOException("Gemini API request failed with HTTP status " + response.code() + ".");
             }
 
@@ -161,6 +169,65 @@ public class ChatbotService {
                 throw new IOException("Gemini API returned an empty response.");
             }
             return parseGeminiResponse(responseBody.string(), objectMapper);
+        }
+    }
+
+    private Response executeGeminiRequest(Request request) throws IOException {
+        return executeGeminiRequest(request, httpClient);
+    }
+
+    Response executeGeminiRequest(Request request, OkHttpClient client) throws IOException {
+        for (int attempt = 1; attempt <= MAX_GEMINI_ATTEMPTS; attempt++) {
+            Response response;
+            try {
+                response = client.newCall(request).execute();
+            } catch (IOException e) {
+                if (attempt == MAX_GEMINI_ATTEMPTS) {
+                    throw new IOException("Gemini API request failed due to a network error after "
+                        + MAX_GEMINI_ATTEMPTS + " attempts.", e);
+                }
+                logger.warn("Gemini request for model {} encountered a network error on attempt {}/{}; retrying.",
+                    geminiApiConfig.getModel(), attempt, MAX_GEMINI_ATTEMPTS);
+                pauseBeforeRetry(attempt);
+                continue;
+            }
+
+            if (!isRetryableGeminiStatus(response.code())) {
+                return response;
+            }
+            if (attempt == MAX_GEMINI_ATTEMPTS) {
+                logger.error("Gemini request for model {} exhausted {} attempts after transient HTTP status {}.",
+                    geminiApiConfig.getModel(), MAX_GEMINI_ATTEMPTS, response.code());
+                return response;
+            }
+
+            logger.warn("Gemini request for model {} returned transient HTTP status {} on attempt {}/{}; retrying.",
+                geminiApiConfig.getModel(), response.code(), attempt, MAX_GEMINI_ATTEMPTS);
+            response.close();
+            pauseBeforeRetry(attempt);
+        }
+        throw new IOException("Gemini API request did not complete.");
+    }
+
+    static boolean isRetryableGeminiStatus(int statusCode) {
+        return statusCode == 429 || (statusCode >= 500 && statusCode <= 599);
+    }
+
+    static long retryDelayMillis(int failedAttempt, long jitterMillis) {
+        if (failedAttempt < 1) {
+            throw new IllegalArgumentException("Failed attempt must be positive.");
+        }
+        long exponentialDelay = Math.min(1000L, 250L << Math.min(failedAttempt - 1, 2));
+        return exponentialDelay + Math.max(0L, Math.min(jitterMillis, 250L));
+    }
+
+    private void pauseBeforeRetry(int failedAttempt) throws IOException {
+        long delayMillis = retryDelayMillis(failedAttempt, ThreadLocalRandom.current().nextLong(251));
+        try {
+            Thread.sleep(delayMillis);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IOException("Gemini API retry was interrupted.", e);
         }
     }
 
@@ -277,7 +344,7 @@ public class ChatbotService {
         return text.toString();
     }
 
-    private List<TourEntity> findRelevantTours(String query) throws IOException {
+    List<TourEntity> findRelevantTours(String query) throws IOException {
         List<Double> queryEmbedding = embeddingService.generateQueryEmbedding(query);
 
         TourFilterRequest filterRequest = new TourFilterRequest();
@@ -300,7 +367,7 @@ public class ChatbotService {
                 double similarity = embeddingService.cosineSimilarity(queryEmbedding, tourEmbedding);
                 similarities.add(new TourSimilarity(tour, similarity));
             } catch (Exception e) {
-                System.err.println("Error parsing embedding for tour " + tour.getId() + ": " + e.getMessage());
+                logger.warn("Skipping unusable embedding for tour {}: {}", tour.getId(), e.getMessage());
             }
         }
 
