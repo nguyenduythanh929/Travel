@@ -6,7 +6,6 @@ import { FaCalendarAlt, FaBus, FaTicketAlt } from "react-icons/fa";
 import Link from "next/link";
 import { useAppContext } from "@/app/AppProvider";
 import { toast } from "sonner";
-// import { Button } from "@/components/ui/button"
 
 type TourCardProps = {
   id: number;

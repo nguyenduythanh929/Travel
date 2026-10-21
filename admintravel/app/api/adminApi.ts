@@ -1,9 +1,4 @@
-// src/app/api/adminApi.ts
-// Service để gọi API backend Spring Boot cho Admin Accounts Management
-
 import api from "@/app/lib/axios";
-
-// ============== TYPES ==============
 
 export interface RoleDTO {
   id: number;
@@ -62,8 +57,6 @@ export interface AdminFilterRequest {
   startDate?: string;
   endDate?: string;
 }
-
-// ============== API FUNCTIONS ==============
 
 /**
  * Lấy danh sách admin accounts với filters và pagination
@@ -126,4 +119,3 @@ export const deleteMultipleAdmins = async (ids: number[]) => {
     data: ids,
   });
 };
-

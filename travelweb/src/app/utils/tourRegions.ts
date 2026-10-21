@@ -1,4 +1,3 @@
-// Mapping for tour types and regions
 export interface RegionInfo {
   id: number;
   slug: string;
@@ -8,7 +7,6 @@ export interface RegionInfo {
   parentLabel: string;
 }
 
-// Tour type mapping
 export const tourRegions: { [key: number]: RegionInfo } = {
   1: {
     id: 1,
@@ -108,7 +106,6 @@ export function getTourBreadcrumb(
     return breadcrumbs;
   }
 
-  // Add parent if exists (Trong nước or Nước ngoài)
   if (region.parentId > 0) {
     const parent = tourRegions[region.parentId];
     if (parent) {
@@ -119,13 +116,11 @@ export function getTourBreadcrumb(
     }
   }
 
-  // Add current region (Miền Bắc, Châu Á, etc.)
   breadcrumbs.push({
     label: region.label,
     href: `/tourdetail/${region.slug}`,
   });
 
-  // Add tour name
   if (tourName) {
     breadcrumbs.push({ label: tourName });
   }
@@ -150,6 +145,5 @@ export function getTourDetailPath(tourId: number, tourTypeId?: number): string {
     return `/tourdetail/trongnuoc/${tourId}`;
   }
 
-  // Use the region's slug directly for the path
   return `/tourdetail/${region.slug}/${tourId}`;
 }

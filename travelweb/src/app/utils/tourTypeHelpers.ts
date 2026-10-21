@@ -1,4 +1,3 @@
-// utils/tourTypeHelpers.ts
 import { TourTypeResponse } from "@/api/tourTypeApi";
 
 /**
@@ -23,10 +22,8 @@ export function flattenTourTypes(
   const result: TourTypeResponse[] = [];
 
   tourTypes.forEach((parent) => {
-    // Add parent
     result.push(parent);
 
-    // Add children if exists
     if (parent.children && parent.children.length > 0) {
       result.push(...parent.children);
     }
@@ -152,7 +149,6 @@ export function getTourTypeBreadcrumb(
 
   const breadcrumb = ["Trang chủ"];
 
-  // If current is a child, find and add parent
   if (currentTourType.parentId) {
     const parent = tourTypes.find((t) => t.id === currentTourType.parentId);
     if (parent) {

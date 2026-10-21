@@ -1,4 +1,3 @@
-// import { toast } from "@/components/ui/use-toast";
 import { EntityError } from "@/app/lib/http";
 import { type ClassValue, clsx } from "clsx";
 import { UseFormSetError } from "react-hook-form";
@@ -62,12 +61,10 @@ export const formatDateTime = (dateTimeArray: [number, number, number, number, n
     return "";
   }
 
-  // Nếu là string, trả về như cũ
   if (typeof dateTimeArray === "string") {
     return dateTimeArray;
   }
 
-  // Nếu không phải array, trả về empty
   if (!Array.isArray(dateTimeArray)) {
     return "";
   }
@@ -90,7 +87,6 @@ export const formatDate = (dateArray: [number, number, number, number, number, n
     return "";
   }
 
-  // Nếu là string, convert to date
   if (typeof dateArray === "string") {
     const date = new Date(dateArray);
     const dayStr = String(date.getDate()).padStart(2, "0");
@@ -98,7 +94,6 @@ export const formatDate = (dateArray: [number, number, number, number, number, n
     return `${dayStr}/${monthStr}/${date.getFullYear()}`;
   }
 
-  // Nếu không phải array, trả về empty
   if (!Array.isArray(dateArray)) {
     return "";
   }

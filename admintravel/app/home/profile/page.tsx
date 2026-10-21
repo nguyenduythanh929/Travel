@@ -28,7 +28,6 @@ const ProfilePage: React.FC = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
 
-  // Form states
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -36,14 +35,12 @@ const ProfilePage: React.FC = () => {
     address: "",
   });
 
-  // Password form states
   const [passwordData, setPasswordData] = useState({
     oldPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
 
-  // Fetch current user
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -68,13 +65,11 @@ const ProfilePage: React.FC = () => {
     fetchUser();
   }, []);
 
-  // Handle form input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle profile update
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
@@ -99,7 +94,6 @@ const ProfilePage: React.FC = () => {
     }
   };
 
-  // Handle password change
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;

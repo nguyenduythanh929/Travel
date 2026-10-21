@@ -1,7 +1,6 @@
 import { BACKEND_URL } from "@/lib/backend";
 import React, { useState, useEffect } from "react";
 
-// Simple Star Rating Modal
 const SimpleRatingModal = ({
   isOpen,
   onClose,
@@ -41,7 +40,6 @@ const SimpleRatingModal = ({
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
       <div className="bg-white rounded-xl shadow-xl w-[320px] p-6">
-        {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-lg font-semibold text-gray-800">
             {isUpdate ? "Cập nhật đánh giá" : "Đánh giá tour"}
@@ -110,7 +108,6 @@ const SimpleRatingModal = ({
   );
 };
 
-// Demo Component
 interface RatingModelProps {
   bookingStatus: number;
   tourId: number;
@@ -143,7 +140,6 @@ const RatingModel = ({ bookingStatus, tourId, userId }: RatingModelProps) => {
           setExistingReview(data);
         }
       } catch (error) {
-        // No existing review, that's fine
         console.log("No existing review found");
       } finally {
         setIsLoading(false);
@@ -203,7 +199,6 @@ const RatingModel = ({ bookingStatus, tourId, userId }: RatingModelProps) => {
     }
   };
 
-  // If booking is not completed, show disabled button with tooltip
   if (!isCompleted) {
     return (
       <div

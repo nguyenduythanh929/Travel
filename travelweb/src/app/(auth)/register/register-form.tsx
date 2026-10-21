@@ -44,23 +44,11 @@ export default function RegisterForm() {
         },
         method: "POST",
       });
-      // .then(async (res) => {
-      //   const payload = await res.json();
-      //   console.log("Register Response:", payload);
-      //   const data = {
-      //     status: res.status,
-      //     payload,
-      //   };
-      //   if (!res.ok) {
-      //     throw data;
-      //   }
-      // });
 
       // Error responses may have an empty or non-JSON body
       const payload = await res.json().catch(() => null);
       console.log("Register Response:", payload);
 
-      // 2️⃣ Kiểm tra kết quả đăng ký
       if (!res.ok) {
         throw new Error(`Register failed: ${res.status}`);
       }

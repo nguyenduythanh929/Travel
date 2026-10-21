@@ -43,7 +43,6 @@ export default function TourCard({ tour }: TourCardProps) {
     return `${yy}/${mm}/${dd}`;
   }
   const patharray = pathname.split("/");
-  // console.log("Path array:", patharray);
 
   const handlerClick = () => {
     let pathtour: string = "";
@@ -75,7 +74,6 @@ export default function TourCard({ tour }: TourCardProps) {
         </div>
       </div>
 
-      {/* Title */}
       <h3 className="mt-3 font-semibold text-[15px] leading-5">
         {tour?.name}
         <br /> Lorem ipsum dolor sit amet...

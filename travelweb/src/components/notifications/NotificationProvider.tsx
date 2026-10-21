@@ -20,7 +20,6 @@ export default function NotificationProvider({
   const notifications = useNotificationStore((state) => state.notifications);
   const hasHydrated = useNotificationStore((state) => state.hasHydrated);
 
-  // Connect to WebSocket when user is authenticated
   useEffect(() => {
     if (userId && sessionToken) {
       console.log("Connecting WebSocket for user:", userId);
@@ -32,7 +31,6 @@ export default function NotificationProvider({
     }
   }, [userId, sessionToken, isAdmin]);
 
-  // Show toast when new notification arrives
   useEffect(() => {
     if (!hasHydrated) return;
 

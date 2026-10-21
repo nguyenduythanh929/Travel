@@ -98,7 +98,6 @@ class WebSocketService {
       const notification = JSON.parse(message.body);
       console.log("Received notification:", notification);
 
-      // Add notification to store
       useNotificationStore.getState().addNotification({
         bookingId: notification.bookingId,
         bookingCode: notification.bookingCode,
@@ -148,7 +147,6 @@ class WebSocketService {
     return this.client?.connected ?? false;
   }
 
-  // Update user context (e.g., when user logs in/out or role changes)
   updateContext(userId: string, isAdmin: boolean): void {
     if (this.userId !== userId || this.isAdmin !== isAdmin) {
       this.disconnect();
@@ -157,10 +155,8 @@ class WebSocketService {
   }
 }
 
-// Singleton instance
 export const webSocketService = new WebSocketService();
 
-// React hook for using WebSocket service
 export function useWebSocket() {
   return {
     connect: (userId: string, isAdmin?: boolean) =>

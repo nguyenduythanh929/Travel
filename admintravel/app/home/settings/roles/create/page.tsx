@@ -23,7 +23,6 @@ export default function RoleCreatePage() {
     permissionIds: [] as number[],
   });
 
-  // Fetch permissions
   useEffect(() => {
     const fetchPermissions = async () => {
       try {
@@ -41,7 +40,6 @@ export default function RoleCreatePage() {
     fetchPermissions();
   }, []);
 
-  // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -50,7 +48,6 @@ export default function RoleCreatePage() {
     }));
   };
 
-  // Handle permission checkbox change
   const handlePermissionChange = (permissionId: number) => {
     setFormData((prev) => {
       const isSelected = prev.permissionIds.includes(permissionId);
@@ -63,7 +60,6 @@ export default function RoleCreatePage() {
     });
   };
 
-  // Handle form submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 

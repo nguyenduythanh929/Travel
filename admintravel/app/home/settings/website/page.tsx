@@ -19,7 +19,6 @@ export default function WebsiteInfoPage() {
     address: "",
   });
 
-  // Fetch website settings on mount
   useEffect(() => {
     const fetchSettings = async () => {
       try {
@@ -42,7 +41,6 @@ export default function WebsiteInfoPage() {
     fetchSettings();
   }, []);
 
-  // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -51,7 +49,6 @@ export default function WebsiteInfoPage() {
     }));
   };
 
-  // Handle form submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 

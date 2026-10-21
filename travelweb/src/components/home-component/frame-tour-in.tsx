@@ -20,17 +20,6 @@ export default function TourIn() {
     <Loading />;
   }
 
-  // useEffect(() => {
-  //   if (show) {
-  //     setshowtourIn(tourin);
-  //   } else {
-  //     setshowtourIn(tourin.length > 5 ? tourin.slice(0, 4) : tourin);
-  //   }
-  // }, [tourin, show]);
-
-  // const showTour = () => {
-  //   setShow((prevShow) => !prevShow);
-  // };
   return (
     <div className="xl:w-[1280px] m-auto mt-30">
       <h2 className="text-4xl text-[#4502c7] font-bold text-center">

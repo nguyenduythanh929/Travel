@@ -78,7 +78,6 @@ export default function CartSummary({
 
   return (
     <div className="max-w-5xl mx-auto bg-white p-6 rounded-2xl shadow-sm mt-6 ">
-      {/* Header */}
       <div className="">
         <div className="flex justify-between items-center border-b pb-4 mb-4 ">
           <h2 className="text-xl font-bold text-purple-700">Giỏ Hàng</h2>

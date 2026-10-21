@@ -88,7 +88,6 @@ export default function PaymentForm({
     setIsSubmitting(true);
 
     try {
-      // Create checkout request with selected items only
       const checkoutRequest = {
         userId: userId,
         cartItemIds: selectedItemIds,
@@ -115,13 +114,11 @@ export default function PaymentForm({
         return;
       }
 
-      // If VNPay payment and we have a payment URL, redirect
       if (payId === 3 && result.paymentUrl) {
         window.location.href = result.paymentUrl;
         return;
       }
 
-      // For other payment methods, show success and redirect
       console.log("Checkout successful:", result);
       toast.success("Đặt tour thành công!");
       route.push("/");
@@ -133,14 +130,12 @@ export default function PaymentForm({
     }
   };
 
-  // Handle payment success callback
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const success = params.get("success");
 
     if (success === "true") {
       toast.success("Thanh toán thành công!");
-      // Clear the URL params
       window.history.replaceState({}, "", window.location.pathname);
     } else if (success === "false") {
       toast.error("Thanh toán thất bại");
@@ -150,7 +145,6 @@ export default function PaymentForm({
 
   return (
     <div className="bg-white p-6 rounded-2xl shadow-md max-w-3xl mx-auto mt-6">
-      {/* Thông tin khách hàng */}
       <h2 className="text-2xl font-bold text-purple-700 mb-4">
         Thông Tin Khách Hàng
       </h2>
@@ -192,7 +186,6 @@ export default function PaymentForm({
           className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-600"
         />
 
-        {/* Mã giảm giá */}
         <div>
           <h2 className="text-2xl font-bold text-purple-700 mt-6 mb-2">
             Mã Giảm Giá
@@ -206,7 +199,6 @@ export default function PaymentForm({
           />
         </div>
 
-        {/* Phương thức thanh toán */}
         <h2 className="text-2xl font-bold text-purple-700 mt-6">
           Chọn Phương Thức Thanh Toán
         </h2>
@@ -230,7 +222,6 @@ export default function PaymentForm({
           ))}
         </div>
 
-        {/* Hiển thị thông tin chuyển khoản */}
         {payId === 2 && (
           <div className="bg-gray-100 border-l-4 border-purple-600 p-4 mt-4 rounded-lg">
             <h3 className="font-semibold text-purple-700 mb-1">
@@ -248,7 +239,6 @@ export default function PaymentForm({
           </div>
         )}
 
-        {/* Order Summary */}
         <div className="bg-purple-50 p-4 rounded-lg mt-6">
           <div className="flex justify-between items-center">
             <span className="text-gray-700">

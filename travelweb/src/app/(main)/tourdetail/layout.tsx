@@ -67,15 +67,11 @@ export default function TourDetailLayout({
 
         let type: TourTypeResponse | undefined = undefined;
 
-        // -------------------------------
-        // 1️⃣ Nếu có idTour → lấy thông tin tour
-        // -------------------------------
         if (idTour) {
           const tourType = await getTourTypeByTourId(Number(idTour)); // tourType đã là data
           const response = await getTourDetail(Number(idTour));
           console.log("Tìm tour theo id: ", tourType);
 
-          // Tìm loại tour bằng tour.tourTypeId
           type = allTourTypes.find((t) => t.id === tourType.id);
           console.log("Tìm loại tour bằng tourType", type);
 
@@ -90,16 +86,12 @@ export default function TourDetailLayout({
               });
             });
 
-            // Cuối cùng là Tour
             items.push({
               label: response.data.name,
               href: `/tourdetail/${type.value}/${idTour}`,
             });
           }
         }
-        // -------------------------------
-        // 2️⃣ Không có idTour → chỉ đang ở trang Place
-        // -------------------------------
         else {
           type = findTourTypeByValue(allTourTypes, place);
           if (type) {
@@ -112,7 +104,6 @@ export default function TourDetailLayout({
               });
             });
           } else {
-            // Fallback
             items.push({
               label: place,
               href: `/tourdetail/${place}`,

@@ -1,4 +1,3 @@
-// store/counterStore.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { getTours } from "../app/api/tours/route";
@@ -22,7 +21,6 @@ export const useOutCountryStore = create<TourStore>()(
         try {
           const res = await getTours(0, 4, 2);
 
-          // const data: TourDetailResponse[] = res.data;
           set({ tours: res.data, loading: false });
           console.log("Fetched tours:", res.data);
         } catch (err) {

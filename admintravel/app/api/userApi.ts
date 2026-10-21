@@ -4,7 +4,6 @@ const API_BASE_URL =
 
 const USERS_ENDPOINT = `${API_BASE_URL}/users`;
 
-// Handle API response errors
 const handleResponse = async (res: Response) => {
   if (res.status === 401) {
     if (typeof window !== "undefined") {
@@ -115,7 +114,6 @@ export const getUserById = async (id: number): Promise<UserDetail> => {
 };
 
 export const getCurrentUser = async (): Promise<UserDetail> => {
-  // Get userId from cookie
   const userId = document.cookie
     .split("; ")
     .find((row) => row.startsWith("userId="))

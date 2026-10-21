@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-// Component Pagination
 interface Typepagination{
     currentPage:number;
     totalPages:number;
@@ -9,7 +8,6 @@ interface Typepagination{
 
 }
 export default function  Pagination({ currentPage, totalPages, onPageChange }:Typepagination) {
-    //   const [currentPage, setCurrentPage] = useState(1);
   const getPageNumbers = () => {
     const pages = [];
     const maxVisible = 5;
@@ -53,7 +51,6 @@ export default function  Pagination({ currentPage, totalPages, onPageChange }:Ty
 
   return (
     <div className="flex items-center justify-center gap-2">
-      {/* Previous Button */}
       <button
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
@@ -68,7 +65,6 @@ export default function  Pagination({ currentPage, totalPages, onPageChange }:Ty
         <ChevronLeft size={20} />
       </button>
 
-      {/* Page Numbers */}
       {getPageNumbers().map((page, index) => (
         page === '...' ? (
           <span key={`ellipsis-${index}`} className="px-2 text-gray-400">
@@ -91,7 +87,6 @@ export default function  Pagination({ currentPage, totalPages, onPageChange }:Ty
         )
       ))}
 
-      {/* Next Button */}
       <button
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
@@ -108,20 +103,3 @@ export default function  Pagination({ currentPage, totalPages, onPageChange }:Ty
     </div>
   );
 }
-
-// Demo sử dụng component
-// export  function PaginationDemo() {
-
-//   const totalPages = 10;
-
-//   return (
-//     <div className="">
-//         <Pagination 
-//           currentPage={currentPage}
-//           totalPages={totalPages}
-//           onPageChange={setCurrentPage}
-//         />
- 
-//     </div>
-//   );
-// }

@@ -28,7 +28,6 @@ export default function AdminEditPage() {
     status: 1,
   });
 
-  // Fetch admin data and roles
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -60,7 +59,6 @@ export default function AdminEditPage() {
         console.log("Admin data loaded:", adminResponse.data);
         console.log("Selected role ID:", currentRoleId);
 
-        // Set form data with existing admin data
         setFormData({
           name: adminResponse.data.name,
           email: adminResponse.data.email,
@@ -80,7 +78,6 @@ export default function AdminEditPage() {
     fetchData();
   }, [adminId]);
 
-  // Handle input change
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -91,7 +88,6 @@ export default function AdminEditPage() {
     }));
   };
 
-  // Handle form submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 

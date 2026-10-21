@@ -1,9 +1,4 @@
-// src/api/tourTypeApi.ts
-// Service để gọi API Tour Types từ backend Spring Boot
-
 import api from "@/app/lib/axios";
-
-// ============== TYPES ==============
 
 export interface TourTypeResponse {
   id: number;
@@ -16,8 +11,6 @@ export interface TourTypeResponse {
   children?: TourTypeResponse[];
   selected: boolean;
 }
-
-// ============== API FUNCTIONS ==============
 
 /**
  * Lấy cấu trúc cây tour types từ backend
@@ -77,5 +70,4 @@ export const getTourTypeByTourId = async (
   }
 };
 
-// Export axios instance nếu cần custom requests
 export { api };

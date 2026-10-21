@@ -28,7 +28,6 @@ export default function ToursPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
 
-  // Filters
   const [statusFilter, setStatusFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [priceRangeFilter, setPriceRangeFilter] = useState("");
@@ -47,7 +46,6 @@ export default function ToursPage() {
     return `${BACKEND_URL}/api/tours/images/${raw}`;
   };
 
-  // Reset to page 1 when filters change
   useEffect(() => {
     if (currentPage !== 1) {
       setCurrentPage(1);
@@ -83,7 +81,6 @@ export default function ToursPage() {
         priceFrom = 6000000;
       }
 
-      // Convert status filter to number
       const statusValue = 1;
 
       const response = await getTours(
@@ -175,7 +172,6 @@ export default function ToursPage() {
     <>
       <h1 className="box-title">Quản lý tour</h1>
 
-      {/* Filters Section */}
       <div className="section-4">
         <div className="inner-wrap">
           <div className="inner-item inner-label">
@@ -245,7 +241,6 @@ export default function ToursPage() {
         </div>
       </div>
 
-      {/* Actions Section */}
       <div className="section-5">
         <div className="inner-wrap">
           <div className="inner-change-status">
@@ -285,7 +280,6 @@ export default function ToursPage() {
         </div>
       </div>
 
-      {/* Table Section */}
       <div className="section-6">
         <div className="table-2">
           {loading ? (
@@ -434,7 +428,6 @@ export default function ToursPage() {
         </div>
       </div>
 
-      {/* Pagination Section */}
       <div className="section-7">
         <span className="inner-label">
           {loading

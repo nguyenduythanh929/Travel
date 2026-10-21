@@ -1,9 +1,4 @@
-// src/api/websiteApi.ts
-// Service để gọi API backend Spring Boot cho Website Settings
-
 import api from "@/app/lib/axios";
-
-// ============== TYPES ==============
 
 export interface WebsiteSettingResponse {
   id: number;
@@ -19,8 +14,6 @@ export interface WebsiteSettingRequest {
   email: string;
   address: string;
 }
-
-// ============== API FUNCTIONS ==============
 
 /**
  * Lấy thông tin website settings
@@ -38,5 +31,4 @@ export const updateWebsiteSettings = async (data: WebsiteSettingRequest) => {
   return api.put<WebsiteSettingResponse>("/website-settings", data);
 };
 
-// Export axios instance nếu cần custom requests
 export { api };

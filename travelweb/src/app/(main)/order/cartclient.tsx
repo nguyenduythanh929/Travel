@@ -56,7 +56,6 @@ export default function CartClient() {
     const result: CartData = await res.json();
     setItems(result.items);
     setCartData(result);
-    // Auto-select all items on initial load
     if (result.items && result.items.length > 0) {
       setSelectedIds(new Set(result.items.map((item) => item.id)));
     }
@@ -66,7 +65,6 @@ export default function CartClient() {
     if (userId) loadData();
   }, [userId]);
 
-  // Toggle single item selection
   const toggleItemSelection = (itemId: number) => {
     setSelectedIds((prev) => {
       const newSet = new Set(prev);
@@ -79,31 +77,26 @@ export default function CartClient() {
     });
   };
 
-  // Select all items
   const selectAll = () => {
     if (items) {
       setSelectedIds(new Set(items.map((item) => item.id)));
     }
   };
 
-  // Deselect all items
   const deselectAll = () => {
     setSelectedIds(new Set());
   };
 
-  // Check if all items are selected
   const allSelected = useMemo(() => {
     if (!items || items.length === 0) return false;
     return items.every((item) => selectedIds.has(item.id));
   }, [items, selectedIds]);
 
-  // Get selected items
   const selectedItems = useMemo(() => {
     if (!items) return [];
     return items.filter((item) => selectedIds.has(item.id));
   }, [items, selectedIds]);
 
-  // Calculate total of selected items
   const selectedTotal = useMemo(() => {
     return selectedItems.reduce((sum, item) => sum + item.subtotal, 0);
   }, [selectedItems]);

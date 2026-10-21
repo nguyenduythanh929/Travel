@@ -19,7 +19,6 @@ export default function AdminAccountsListPage() {
   const [error, setError] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
-  // Filter states
   const [filters, setFilters] = useState<AdminFilterRequest>({
     keyword: "",
     status: undefined,
@@ -28,13 +27,11 @@ export default function AdminAccountsListPage() {
     endDate: undefined,
   });
 
-  // Pagination states
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
   const [limit] = useState(10);
 
-  // Fetch roles for filter
   useEffect(() => {
     const fetchRoles = async () => {
       try {
@@ -47,7 +44,6 @@ export default function AdminAccountsListPage() {
     fetchRoles();
   }, []);
 
-  // Fetch admin accounts
   const fetchAdmins = async () => {
     try {
       setLoading(true);
@@ -72,19 +68,16 @@ export default function AdminAccountsListPage() {
     fetchAdmins();
   }, [currentPage, filters]);
 
-  // Handle search
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentPage(0);
     setFilters((prev) => ({ ...prev, keyword: e.target.value }));
   };
 
-  // Handle filter change
   const handleFilterChange = (name: string, value: any) => {
     setCurrentPage(0);
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle reset filter
   const handleResetFilter = () => {
     setCurrentPage(0);
     setFilters({
@@ -96,7 +89,6 @@ export default function AdminAccountsListPage() {
     });
   };
 
-  // Handle select all
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
       setSelectedIds(admins.map((admin) => admin.id));
@@ -105,7 +97,6 @@ export default function AdminAccountsListPage() {
     }
   };
 
-  // Handle select single
   const handleSelectOne = (id: number) => {
     if (selectedIds.includes(id)) {
       setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
@@ -114,7 +105,6 @@ export default function AdminAccountsListPage() {
     }
   };
 
-  // Handle delete single admin
   const handleDeleteOne = async (id: number) => {
     if (!confirm("Bạn có chắc chắn muốn xóa tài khoản này?")) return;
 
@@ -129,7 +119,6 @@ export default function AdminAccountsListPage() {
     }
   };
 
-  // Handle batch delete
   const handleBatchDelete = async () => {
     if (selectedIds.length === 0) {
       alert("Vui lòng chọn ít nhất một tài khoản để xóa");
@@ -150,7 +139,6 @@ export default function AdminAccountsListPage() {
     }
   };
 
-  // Handle page change
   const handlePageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setCurrentPage(parseInt(e.target.value));
   };
@@ -159,7 +147,6 @@ export default function AdminAccountsListPage() {
     <>
       <h1 className="box-title">Tài khoản quản trị</h1>
 
-      {/* Filters Section */}
       <div className="section-4">
         <div className="inner-wrap">
           <div className="inner-item inner-label">
@@ -221,7 +208,6 @@ export default function AdminAccountsListPage() {
         </div>
       </div>
 
-      {/* Actions and Search Section */}
       <div className="section-5">
         <div className="inner-wrap">
           <div className="inner-change-status">
@@ -266,7 +252,6 @@ export default function AdminAccountsListPage() {
         </div>
       )}
 
-      {/* Table Section */}
       <div className="section-6">
         <div className="table-2">
           <table>
@@ -430,7 +415,6 @@ export default function AdminAccountsListPage() {
         </div>
       </div>
 
-      {/* Pagination Section */}
       <div className="section-7">
         <span className="inner-label">
           Hiển thị {admins.length > 0 ? currentPage * limit + 1 : 0} -{" "}

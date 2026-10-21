@@ -1,14 +1,9 @@
 import { BACKEND_URL } from "@/lib/backend";
-// src/app/api/contactApi.ts
-// Service để gọi API backend Spring Boot cho Contact
-
 import axios from "axios";
 
-// Lấy URL từ environment variables
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || `${BACKEND_URL}/api`;
 
-// Tạo axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -16,8 +11,6 @@ const api = axios.create({
   },
   withCredentials: true,
 });
-
-// ============== TYPES ==============
 
 export interface ContactRequest {
   email: string;
@@ -28,8 +21,6 @@ export interface ContactResponse {
   email: string;
 }
 
-// ============== API FUNCTIONS ==============
-
 /**
  * Gửi thông tin liên hệ (public endpoint)
  */
@@ -38,5 +29,4 @@ export const createContact = async (data: ContactRequest) => {
   return api.post<ContactResponse>("/contacts", data);
 };
 
-// Export axios instance nếu cần custom requests
 export { api };

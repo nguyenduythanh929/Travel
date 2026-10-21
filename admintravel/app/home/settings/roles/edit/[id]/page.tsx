@@ -27,7 +27,6 @@ export default function RoleEditPage() {
     permissionIds: [] as number[],
   });
 
-  // Fetch role data and permissions
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,7 +40,6 @@ export default function RoleEditPage() {
 
         setPermissionGroups(permissionsResponse.data);
 
-        // Set form data with existing role data
         setFormData({
           name: roleResponse.data.name,
           code: roleResponse.data.code,
@@ -59,7 +57,6 @@ export default function RoleEditPage() {
     fetchData();
   }, [roleId]);
 
-  // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -68,7 +65,6 @@ export default function RoleEditPage() {
     }));
   };
 
-  // Handle permission checkbox change
   const handlePermissionChange = (permissionId: number) => {
     setFormData((prev) => {
       const isSelected = prev.permissionIds.includes(permissionId);
@@ -81,7 +77,6 @@ export default function RoleEditPage() {
     });
   };
 
-  // Handle form submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 

@@ -22,7 +22,6 @@ interface NotificationState {
   isConnected: boolean;
   hasHydrated: boolean;
 
-  // Actions
   addNotification: (notification: Omit<BookingNotification, "read" | "id">) => void;
   markAsRead: (id: string) => void;
   markAllAsRead: () => void;

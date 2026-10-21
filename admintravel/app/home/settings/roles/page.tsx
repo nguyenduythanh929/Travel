@@ -21,7 +21,6 @@ export default function RolesListPage() {
   const [totalItems, setTotalItems] = useState(0);
   const [limit] = useState(10);
 
-  // Fetch roles
   const fetchRoles = async () => {
     try {
       setLoading(true);
@@ -42,13 +41,11 @@ export default function RolesListPage() {
     fetchRoles();
   }, [currentPage, keyword]);
 
-  // Handle search
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
     setCurrentPage(0); // Reset to first page on search
   };
 
-  // Handle select all
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
       setSelectedIds(roles.map((role) => role.id));
@@ -57,7 +54,6 @@ export default function RolesListPage() {
     }
   };
 
-  // Handle select single
   const handleSelectOne = (id: number) => {
     if (selectedIds.includes(id)) {
       setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
@@ -66,7 +62,6 @@ export default function RolesListPage() {
     }
   };
 
-  // Handle delete single role
   const handleDeleteOne = async (id: number) => {
     if (!confirm("Bạn có chắc chắn muốn xóa nhóm quyền này?")) return;
 
@@ -81,7 +76,6 @@ export default function RolesListPage() {
     }
   };
 
-  // Handle batch delete
   const handleBatchDelete = async () => {
     if (selectedIds.length === 0) {
       alert("Vui lòng chọn ít nhất một nhóm quyền để xóa");
@@ -101,7 +95,6 @@ export default function RolesListPage() {
     }
   };
 
-  // Handle page change
   const handlePageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setCurrentPage(parseInt(e.target.value));
   };

@@ -18,7 +18,6 @@ interface NotificationState {
   unreadCount: number;
   isConnected: boolean;
 
-  // Actions
   addNotification: (notification: BookingNotification) => void;
   markAsRead: (bookingId: number) => void;
   markAllAsRead: () => void;

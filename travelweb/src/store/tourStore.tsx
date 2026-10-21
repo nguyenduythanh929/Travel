@@ -1,4 +1,3 @@
-// store/counterStore.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { getTours } from "../app/api/tours/route";
@@ -23,7 +22,6 @@ export const useStore = create<TourStore>()(
           const offset = 0;
           const res = await getTours(offset, 10);
 
-          // const data: TourDetailResponse[] = res.data;
           set({ tours: res.data, loading: false });
           console.log("Fetched tours:", res.data);
         } catch (err) {

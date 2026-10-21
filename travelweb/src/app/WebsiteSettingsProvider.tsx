@@ -34,7 +34,6 @@ export function WebsiteSettingsProvider({
       } catch (err: any) {
         setError(err.message || "Failed to load website settings");
         console.error("Error fetching website settings:", err);
-        // Set default values on error
         setSettings({
           id: 0,
           websiteName: "28.TRAVEL",

@@ -13,21 +13,18 @@ export default function OrdersPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Filter states
   const [statusPayment, setStatusPayment] = useState<number | undefined>();
   const [bookingStatus, setBookingStatus] = useState<number | undefined>();
   const [dateFrom, setDateFrom] = useState<string | undefined>();
   const [dateTo, setDateTo] = useState<string | undefined>();
   const [searchName, setSearchName] = useState<string | undefined>();
 
-  // Reset về trang 1 khi filter thay đổi
   useEffect(() => {
     if (currentPage !== 1) {
       setCurrentPage(1);
     }
   }, [statusPayment, bookingStatus, dateFrom, dateTo, searchName]);
 
-  // Function để fetch data
   const fetchData = async () => {
     setLoading(true);
     setError(null);
@@ -73,7 +70,6 @@ export default function OrdersPage() {
     }
   };
 
-  // Fetch khi dependencies thay đổi
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps

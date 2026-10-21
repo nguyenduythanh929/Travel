@@ -2,7 +2,6 @@ import { BACKEND_URL } from "@/lib/backend";
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || `${BACKEND_URL}/api`;
 
-// const USERS_ENDPOINT = `${API_BASE_URL}/users`;
 
 export interface VoucherDetail {
   id: number;
@@ -31,9 +30,6 @@ export interface VoucherRequest {
   usageLimit?: number;
   isActive?: boolean;
 }
-// export interface VoucherResponse {
-//   data: VoucherDetail[];
-// }
 
 export const getVouchers = async (): Promise<VoucherDetail[]> => {
   const res = await fetch(`${API_BASE_URL}/vouchers`, {

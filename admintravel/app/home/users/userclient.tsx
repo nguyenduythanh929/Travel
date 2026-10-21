@@ -41,7 +41,6 @@ export default function UsersPageClient() {
   const [loading, setLoading] = useState<boolean>(false);
   const limit = 10;
 
-  // Reset to page 1 when keyword changes
   useEffect(() => {
     if (currentPage !== 1) {
       setCurrentPage(1);

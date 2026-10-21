@@ -1,14 +1,9 @@
 import { BACKEND_URL } from "@/lib/backend";
-// src/api/tourTypeApi.ts
-// Service để gọi API Tour Types từ backend Spring Boot
-
 import axios from "axios";
 
-// Lấy URL từ environment variables
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || `${BACKEND_URL}/api`;
 
-// Tạo axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -16,23 +11,6 @@ const api = axios.create({
   },
   withCredentials: true,
 });
-
-// Add response interceptor để handle errors
-// api.interceptors.response.use(
-//   (response) => {
-//     console.log(`✅ API Success: ${response.config.url}`, response.data);
-//     return response;
-//   },
-//   (error) => {
-//     console.error(
-//       `❌ API Error: ${error.config?.url}`,
-//       error.response?.data || error.message
-//     );
-//     return Promise.reject(error);
-//   }
-// );
-
-// ============== TYPES ==============
 
 export interface TourTypeResponse {
   id: number;
@@ -45,8 +23,6 @@ export interface TourTypeResponse {
   children?: TourTypeResponse[];
   selected: boolean;
 }
-
-// ============== API FUNCTIONS ==============
 
 /**
  * Lấy cấu trúc cây tour types từ backend
@@ -106,5 +82,4 @@ export const getTourTypeByTourId = async (
   }
 };
 
-// Export axios instance nếu cần custom requests
 export { api };

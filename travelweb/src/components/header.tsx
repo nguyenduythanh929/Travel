@@ -1,4 +1,3 @@
-// import { ModeToggle } from "@/components/toggle-theme";
 import NavBarHeader from "@/components/navigation_menu_header";
 import Image from "next/image";
 import Link from "next/link";

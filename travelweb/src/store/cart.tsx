@@ -1,5 +1,4 @@
 import { BACKEND_URL } from "@/lib/backend";
-// store/counterStore.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { getTours } from "../app/api/tours/route";

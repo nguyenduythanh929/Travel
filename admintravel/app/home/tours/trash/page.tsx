@@ -148,7 +148,6 @@ export default function ToursTrashPage() {
     <>
       <h1 className="box-title">Thùng rác tour</h1>
 
-      {/* Actions Section */}
       <div className="section-5">
         <div className="inner-wrap">
           <div className="inner-change-status">
@@ -185,7 +184,6 @@ export default function ToursTrashPage() {
         </div>
       </div>
 
-      {/* Table Section */}
       <div className="section-6">
         <div className="table-2">
           {loading ? (
@@ -250,7 +248,6 @@ export default function ToursTrashPage() {
                       ...tour,
                       status: 1, // set status to active
                     }
-                    // const id = parseInt(tour.id)
                     const id = tour.id
                     console.log("Tour ID:", id, typeof id);
                     return (
@@ -350,7 +347,6 @@ export default function ToursTrashPage() {
         </div>
       </div>
 
-      {/* Pagination Section */}
       <div className="section-7">
         <span className="inner-label">
           Hiển thị {Math.min((currentPage - 1) * limit + 1, totalItems)} -{" "}

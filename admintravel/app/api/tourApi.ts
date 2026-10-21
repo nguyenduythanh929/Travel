@@ -1,9 +1,4 @@
-// src/services/tourApi.ts
-// Service để gọi API backend Spring Boot
-
 import api from "@/app/lib/axios";
-
-// ============== TYPES ==============
 
 export interface TourListResponse {
   totalPages: number;
@@ -84,8 +79,6 @@ export interface TourFilterParams {
   status?: number;
 }
 
-// ============== ADMIN TYPES ==============
-
 export interface LocationResponse {
   id: number;
   name: string;
@@ -161,8 +154,6 @@ export interface TourAdminRequest {
   discount?: number;
   discountType?: string;
 }
-
-// ============== API FUNCTIONS ==============
 
 /**
  * Lấy danh sách tours với filters
@@ -286,5 +277,4 @@ export const getToursByType = async (typeId: number, limit: number = 10) => {
   return getTours(0, limit, typeId);
 };
 
-// Export axios instance nếu cần custom requests
 export { api };

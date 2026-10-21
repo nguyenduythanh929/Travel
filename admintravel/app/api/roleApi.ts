@@ -1,9 +1,4 @@
-// src/api/roleApi.ts
-// Service để gọi API backend Spring Boot cho Role Management
-
 import api from "@/app/lib/axios";
-
-// ============== TYPES ==============
 
 export interface PermissionResponse {
   id: number;
@@ -41,8 +36,6 @@ export interface RoleRequest {
   description: string;
   permissionIds: number[];
 }
-
-// ============== API FUNCTIONS ==============
 
 /**
  * Lấy tất cả permissions được nhóm theo module
@@ -115,5 +108,4 @@ export const deleteMultipleRoles = async (ids: number[]) => {
   });
 };
 
-// Export axios instance nếu cần custom requests
 export { api };

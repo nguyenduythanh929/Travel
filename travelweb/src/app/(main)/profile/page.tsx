@@ -21,7 +21,6 @@ import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import RatingModel from "@/components/RatingModel";
 
-// Types
 interface UserInfo {
   name: string;
   email: string;
@@ -66,7 +65,6 @@ interface TourItem {
 interface PaymentMethod {
   id: number;
   name: string;
-  // Thêm các field khác nếu cần
 }
 interface Booking {
   createdBy: string | null;
@@ -90,7 +88,6 @@ interface Booking {
 }
 type BookingListResponse = Booking[];
 
-// Props Types
 interface SidebarProps {
   activePage: string;
   setActivePage: (page: string) => void;
@@ -116,7 +113,6 @@ interface SubitemProps {
   userId: string;
 }
 
-// Component Sidebar
 const Sidebar: React.FC<SidebarProps> = ({
   activePage,
   setActivePage,
@@ -151,7 +147,6 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <aside className="w-64 bg-white shadow-xl h-screen sticky top-0">
-      {/* Avatar Section */}
       <div className="p-6 border-b border-gray-200">
         <div className="flex flex-col items-center">
           <div className="relative">
@@ -206,7 +201,6 @@ const Sidebar: React.FC<SidebarProps> = ({
   );
 };
 
-// Component Chi tiết
 const ProfileDetails: React.FC<ProfileDetailsProps> = ({
   userId,
   userInfo,
@@ -358,7 +352,6 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
   );
 };
 
-// Component Tours
 
 const MyTours = ({ tourorder, userId }: MyToursProps) => {
   const [isopen, setIsopen] = useState(false);
@@ -368,7 +361,6 @@ const MyTours = ({ tourorder, userId }: MyToursProps) => {
     return `${date[0]}/${date[1]}${date[2]} ${date[3]}:${date[4]}:${date[5]}`;
   };
 
-  // Helper function to get booking status display
   const getBookingStatusDisplay = (status: number) => {
     switch (status) {
       case 0: // CREATED
@@ -509,7 +501,6 @@ const MyTours = ({ tourorder, userId }: MyToursProps) => {
   );
 };
 
-// Component Đổi mật khẩu
 const ChangePassword = ({ userId }: ChangePasswordProps) => {
   const [passwords, setPasswords] = useState<Passwords>({
     oldPassword: "",
@@ -517,7 +508,6 @@ const ChangePassword = ({ userId }: ChangePasswordProps) => {
     confirmPassword: "",
   });
 
-  // State để quản lý hiển thị mật khẩu
   const [showPassword, setShowPassword] = useState({
     oldPassword: false,
     newPassword: false,
@@ -563,7 +553,6 @@ const ChangePassword = ({ userId }: ChangePasswordProps) => {
       );
 
       if (!res.ok) {
-        // Xử lý các loại error cụ thể
         switch (res.status) {
           case 400:
             throw new Error("Thông tin không hợp lệ");
@@ -592,7 +581,6 @@ const ChangePassword = ({ userId }: ChangePasswordProps) => {
     }
   };
 
-  // Function toggle hiển thị mật khẩu
   const togglePasswordVisibility = (field: keyof typeof showPassword): void => {
     setShowPassword((prev) => ({
       ...prev,
@@ -696,7 +684,6 @@ const ChangePassword = ({ userId }: ChangePasswordProps) => {
   );
 };
 
-// Component chính - Profile Page (Desktop)
 const ProfilePage: React.FC = () => {
   const router = useRouter();
   const { userId } = useAppContext();

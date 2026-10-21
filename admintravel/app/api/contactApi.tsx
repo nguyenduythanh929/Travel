@@ -56,7 +56,6 @@ export const getContacts = async (
   return data;
 };
 
-// Delete multiple contacts
 export const deleteContacts = async (
   ids: number[]
 ): Promise<{ message: string }> => {
@@ -76,7 +75,6 @@ export const deleteContacts = async (
   return res.json();
 };
 
-// Add new contact
 export const addContact = async (email: string): Promise<ContactItem> => {
   const res = await fetch(`${API_BASE_URL}`, {
     method: "POST",

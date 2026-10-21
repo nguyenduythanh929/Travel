@@ -69,7 +69,6 @@ export default function Search() {
     startDate: "",
   });
 
-  // fomat ngay
   React.useEffect(() => {
     if (date) {
       let day = String(date.getDate()).padStart(2, "0");
@@ -89,7 +88,6 @@ export default function Search() {
 
   const handleDateSelect = (selectedDate: Date | undefined) => {
     setDate(selectedDate);
-    // Close calendar after selection
     const calendar = document.querySelector(".calendar");
     calendar?.classList.add("hidden");
   };
@@ -109,7 +107,6 @@ export default function Search() {
       dataform.priceTo || undefined,
       dataform.startDate || undefined
     );
-    // const result = await res.json();
     console.log("Filter result:", res.data);
     if (res.data.tours.length === 0) {
       setOpen(true);

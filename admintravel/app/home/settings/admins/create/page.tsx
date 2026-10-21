@@ -26,7 +26,6 @@ export default function AdminCreatePage() {
     status: 1,
   });
 
-  // Fetch roles
   useEffect(() => {
     const fetchRoles = async () => {
       try {
@@ -44,7 +43,6 @@ export default function AdminCreatePage() {
     fetchRoles();
   }, []);
 
-  // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -53,7 +51,6 @@ export default function AdminCreatePage() {
     }));
   };
 
-  // Handle form submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 

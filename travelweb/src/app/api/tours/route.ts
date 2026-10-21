@@ -46,7 +46,6 @@ export interface TourFilterParams {
   priceTo?: number;
 }
 
-// Overloaded function signatures
 export function getTours(params: TourFilterParams): ReturnType<typeof api.get<TourListResponse>>;
 export function getTours(
   offset: number,
@@ -58,7 +57,6 @@ export function getTours(
   startDate?: string
 ): ReturnType<typeof api.get<TourListResponse>>;
 
-// Implementation
 export function getTours(
   paramsOrOffset: TourFilterParams | number,
   limit?: number,
@@ -68,7 +66,6 @@ export function getTours(
   priceTo?: number,
   startDate?: string
 ) {
-  // Check if first parameter is an object (new signature) or number (old signature)
   if (typeof paramsOrOffset === 'object') {
     const params = paramsOrOffset;
     return api.get<TourListResponse>("/tours", {
@@ -78,7 +75,6 @@ export function getTours(
       },
     });
   } else {
-    // Old signature - convert to new format
     const offset = paramsOrOffset;
     return api.get<TourListResponse>("/tours", {
       params: {

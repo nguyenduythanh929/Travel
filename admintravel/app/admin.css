@@ -209,7 +209,6 @@ button {
     font-size: 14px;
   }
 }
-/* End form-account */
 
 /* Header */
 .header {
@@ -341,7 +340,6 @@ button {
     gap: 20px;
   }
 }
-/* End Header */
 
 /* Sider */
 .sider {
@@ -439,7 +437,6 @@ button {
     cursor: pointer;
   }
 }
-/* End Sider */
 
 /* Main */
 .main {
@@ -464,7 +461,6 @@ button {
     padding: 30px 15px;
   }
 }
-/* End Main */
 
 /* Box Title */
 .box-title {
@@ -474,7 +470,6 @@ button {
   font-size: 32px;
   color: var(--color-text);
 }
-/* End Box Title */
 
 /* Section 1 */
 .section-1 {
@@ -523,7 +518,6 @@ button {
     grid-template-columns: repeat(1, 1fr);
   }
 }
-/* End Section 1 */
 
 /* Section 2 */
 .section-2 {
@@ -571,7 +565,6 @@ button {
     padding: 25px 15px;
   }
 }
-/* End Section 2 */
 
 /* Section 3 */
 .section-3 {
@@ -594,7 +587,6 @@ button {
     padding: 25px 15px;
   }
 }
-/* End Section 3 */
 
 /* Text Align */
 .text-left {
@@ -608,7 +600,6 @@ button {
 .text-right {
   text-align: right;
 }
-/* End Text Align */
 
 /* Text Color */
 .text-primary {
@@ -618,7 +609,6 @@ button {
 .text-red {
   color: #ef3826;
 }
-/* End Text Color */
 
 /* Table 1 */
 .table-1 {
@@ -654,7 +644,6 @@ button {
   font-size: 14px;
   color: var(--color-text);
 }
-/* End Table 1 */
 
 /* Tour List */
 .tour-list {
@@ -695,7 +684,6 @@ button {
   font-size: 12px;
   color: var(--color-text);
 }
-/* End Tour List */
 
 /* Badge */
 .badge {
@@ -721,7 +709,6 @@ button {
   background-color: rgba(239, 55, 38, 0.2);
   color: #ef3826;
 }
-/* End Badge */
 
 /* Section 4 */
 .section-4 {
@@ -777,7 +764,6 @@ button {
     padding: 10px 14px;
   }
 }
-/* End Section 4 */
 
 /* Section 5 */
 .section-5 {
@@ -908,13 +894,11 @@ button {
     width: 100%;
   }
 }
-/* End Section 5 */
 
 /* Section 6 */
 .section-6 {
   margin-bottom: 15px;
 }
-/* End Section 6 */
 
 /* Table 2 */
 .table-2 {
@@ -963,7 +947,6 @@ button {
 .table-2 .inner-small {
   font-size: 12px;
 }
-/* End Table 2 */
 
 /* Box Actions */
 .box-actions {
@@ -991,7 +974,6 @@ button {
 .box-actions a:last-child {
   border-right: 0;
 }
-/* End Box Actions */
 
 /* Section 7 */
 .section-7 {
@@ -1015,7 +997,6 @@ button {
   font-size: 14px;
   color: var(--color-text);
 }
-/* End Section 7 */
 
 /* Section 8 */
 .section-8 {
@@ -1319,7 +1300,6 @@ button {
     order: 1;
   }
 }
-/* End Section 8 */
 
 /* Section 9 */
 .section-9 {
@@ -1373,7 +1353,6 @@ button {
     gap: 20px;
   }
 }
-/* End Section 9 */
 
 /* Section 10 */
 .section-10 {
@@ -1431,7 +1410,6 @@ button {
     font-size: 16px;
   }
 }
-/* End Section 10 */
 
 .just-validate-error-label {
   font-size: 12px;
@@ -1515,4 +1493,3 @@ button {
   height: 100%;
   width: 100%;
 }
-/* End checkbox-wrapper-30 */

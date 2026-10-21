@@ -10,7 +10,6 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Ghi log hoặc báo lỗi lên server nếu cần
     console.error(error);
   }, [error]);
 

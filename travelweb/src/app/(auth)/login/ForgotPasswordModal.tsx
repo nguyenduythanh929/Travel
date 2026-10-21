@@ -1,4 +1,3 @@
-// src/components/auth/ForgotPasswordModal.tsx
 "use client";
 import { BACKEND_URL } from "@/lib/backend";
 
@@ -36,7 +35,6 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
     });
 
     if (!res.ok) {
-      // xử lý lỗi từ backend
       const errorData = await res.json();
       console.error(errorData);
       return;
@@ -63,7 +61,6 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
     });
 
     if (!res.ok) {
-      // xử lý lỗi từ backend
       const errorData = await res.json();
       console.error(errorData);
       return;
@@ -91,7 +88,6 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
     });
 
     if (!res.ok) {
-      // xử lý lỗi từ backend
       const errorData = await res.json();
       console.error(errorData);
       return;
@@ -115,7 +111,6 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
-        {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold">Quên mật khẩu</h2>
           <button

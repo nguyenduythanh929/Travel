@@ -41,7 +41,6 @@ export default function ChatBotWidget() {
 
     setLoading(true);
 
-    // Add user message to chat
     const userMessage: Message = { from: "user", text: input };
     setMessages((prev) => [...prev, userMessage]);
 
@@ -49,7 +48,6 @@ export default function ChatBotWidget() {
     setInput("");
 
     try {
-      // Call backend API with sessionId to maintain conversation history
       const response = await getResponseAi(
         currentInput,
         sessionId,
@@ -58,17 +56,14 @@ export default function ChatBotWidget() {
 
       const data = response.data;
 
-      // Save sessionId for future messages
       if (data.sessionId) {
         setSessionId(data.sessionId);
       }
 
-      // Save recommended tours
       if (data.recommendedTours && data.recommendedTours.length > 0) {
         setRecommendedTours(data.recommendedTours);
       }
 
-      // Add bot response to chat
       setMessages((prev) => [
         ...prev,
         { from: "bot", text: data.message, tours: data.recommendedTours },
@@ -80,7 +75,6 @@ export default function ChatBotWidget() {
 
       let errorMessage = "Xin lỗi, đã có lỗi xảy ra. Vui lòng thử lại sau.";
 
-      // Show more specific error if available
       if (error?.response?.data?.message) {
         errorMessage = error.response.data.message;
       } else if (error?.message) {
@@ -123,7 +117,6 @@ export default function ChatBotWidget() {
             exit={{ opacity: 0, y: 20 }}
             className="bg-white w-96 h-[600px] shadow-xl rounded-2xl flex flex-col border"
           >
-            {/* Header */}
             <div className="flex justify-between items-center p-4 border-b bg-blue-500 text-white rounded-t-2xl">
               <h2 className="font-semibold flex items-center gap-2">
                 <MessageCircle size={20} />

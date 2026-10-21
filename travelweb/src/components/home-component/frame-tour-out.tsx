@@ -19,9 +19,6 @@ export default function TourOut() {
     <Loading />;
   }
 
-  // const showTour = () => {
-  //   setShow((prevShow) => !prevShow);
-  // };
   return (
     <div className="xl:w-[1280px] m-auto mt-30 ">
       <h2 className="text-4xl text-[#4502c7] font-bold text-center">

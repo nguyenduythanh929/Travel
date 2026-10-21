@@ -18,7 +18,6 @@ export default function NotificationBell() {
   const removeNotification = useNotificationStore((state) => state.removeNotification);
   const clearNotifications = useNotificationStore((state) => state.clearNotifications);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -81,8 +80,6 @@ export default function NotificationBell() {
     if (!notification.read) {
       markAsRead(notification.id);
     }
-    // Optional: Navigate to booking detail page
-    // router.push(`/bookings/${notification.bookingId}`);
   };
 
   return (
@@ -114,7 +111,6 @@ export default function NotificationBell() {
       {/* Dropdown */}
       {isOpen && (
         <div className="absolute right-0 mt-2 w-96 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-[500px] overflow-hidden">
-          {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50">
             <h3 className="font-semibold text-gray-800">Notifications</h3>
             <div className="flex items-center gap-2">
@@ -162,7 +158,6 @@ export default function NotificationBell() {
                       {getNotificationIcon(notification.notificationType)}
                     </span>
 
-                    {/* Content */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <span className="font-medium text-gray-900 text-sm">

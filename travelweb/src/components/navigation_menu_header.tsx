@@ -24,11 +24,9 @@ const regions = [
 
 
 export default function NavBarHeader() {
-  // const router = useRouter();
   const [tourTypes, setTourTypes] = useState<TourTypeResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch tour types khi component mount
   useEffect(() => {
     const fetchTourTypes = async () => {
       try {
@@ -46,7 +44,6 @@ export default function NavBarHeader() {
     fetchTourTypes();
   }, []);
 
-  // Helper function để tạo URL từ tourType
   const getTourUrl = (tourType: TourTypeResponse): string => {
 
     const identifier = regions.find(x => tourType?.id === x.id )
@@ -54,7 +51,6 @@ export default function NavBarHeader() {
     return `/tourdetail/${identifier?.value}`;
   };
 
-  // Render tour type với children thành dropdown menu
   const renderTourTypeWithChildren = (tourType: TourTypeResponse) => {
     return (
       <NavigationMenuItem key={tourType.id}>
@@ -62,11 +58,8 @@ export default function NavBarHeader() {
           {tourType.name}
         </NavigationMenuTrigger>
 
-        {/* SỬA VỊ TRÍ: Thêm !left-0 và bù trừ -left-4 */}
-        {/* !left-0: Buộc căn lề trái. -left-4: Bù trừ cho padding/margin ngầm. */}
         <NavigationMenuContent className="!w-[320px] !left-0 -left-4">
           <ul className="p-2 rounded-lg shadow-lg">
-            {/* Children links */}
             {tourType.children?.map((child, index) => (
               <li key={child.id}>
                 <Link
@@ -75,8 +68,6 @@ export default function NavBarHeader() {
                     "block px-4 py-3 text-base rounded-md transition-colors",
                     "hover:bg-[#4502C7] hover:text-white",
                     "text-[#4502C7] font-medium",
-                    // Fix: Đảm bảo mục đầu tiên có nền tím và chữ trắng
-                    // index === 0 && "bg-[#4502C7] !text-white"
                   )}
                 >
                   {child.name}
@@ -89,7 +80,6 @@ export default function NavBarHeader() {
     );
   };
 
-  // Render tour type không có children thành link thông thường
   const renderTourTypeLink = (tourType: TourTypeResponse) => {
     return (
       <NavigationMenuItem key={tourType.id}>
@@ -124,14 +114,12 @@ export default function NavBarHeader() {
   return (
     <NavigationMenu>
       <NavigationMenuList className="gap-1">
-        {/* Trang chủ - giữ nguyên */}
         <NavigationMenuItem>
           <Link href="/" className="text-base font-medium text-gray-700 hover:text-purple-600 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors inline-flex items-center">
               Trang Chủ
           </Link>
         </NavigationMenuItem>
 
-        {/* Render dynamic tour types từ API */}
         {tourTypes.map((tourType) => {
           if (tourType.children && tourType.children.length > 0) {
             return renderTourTypeWithChildren(tourType);
@@ -140,7 +128,6 @@ export default function NavBarHeader() {
           }
         })}
 
-        {/* Tin tức - giữ nguyên */}
         <NavigationMenuItem>
           
             <NavigationMenuLink asChild className="text-base font-medium text-gray-700 hover:text-purple-600 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors inline-flex items-center">
@@ -151,7 +138,6 @@ export default function NavBarHeader() {
           
         </NavigationMenuItem>
 
-        {/* Liên hệ - giữ nguyên */}
         <NavigationMenuItem>
             <NavigationMenuLink asChild className="text-base font-medium text-gray-700 hover:text-purple-600 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors inline-flex items-center">
           <Link href="/contact" >

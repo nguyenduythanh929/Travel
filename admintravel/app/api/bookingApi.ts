@@ -2,7 +2,6 @@ import { BACKEND_URL } from "@/lib/backend";
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || `${BACKEND_URL}/api`;
 
-// Handle API response errors
 const handleResponse = async (res: Response) => {
   if (res.status === 401) {
     if (typeof window !== "undefined") {
@@ -131,7 +130,6 @@ export const updateBookingPaymentStatus = async (
   return data;
 };
 
-// ==================== ADMIN BOOKING API ====================
 
 /**
  * Confirm cash payment by staff (offline payment).

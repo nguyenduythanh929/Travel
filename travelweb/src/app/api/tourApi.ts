@@ -1,14 +1,9 @@
 import { BACKEND_URL } from "@/lib/backend";
-// src/services/tourApi.ts
-// Service để gọi API backend Spring Boot
-
 import axios from "axios";
 
-// Lấy URL từ environment variables
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || `${BACKEND_URL}/api`;
 
-// Tạo axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -17,7 +12,6 @@ const api = axios.create({
   withCredentials: true,
 });
 
-// Add response interceptor để handle errors
 api.interceptors.response.use(
   (response) => {
     console.log(`✅ API Success: ${response.config.url}`, response.data);
@@ -31,8 +25,6 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-// ============== TYPES ==============
 
 export interface TourListResponse {
   totalPages: number;
@@ -113,8 +105,6 @@ export interface TourFilterParams {
   status?: number;
 }
 
-// ============== ADMIN TYPES ==============
-
 export interface LocationResponse {
   id: number;
   name: string;
@@ -190,8 +180,6 @@ export interface TourAdminRequest {
   discount?: number;
   discountType?: string;
 }
-
-// ============== API FUNCTIONS ==============
 
 /**
  * Lấy danh sách tours với filters
@@ -315,5 +303,4 @@ export const getToursByType = async (typeId: number, limit: number = 10) => {
   return getTours(0, limit, typeId);
 };
 
-// Export axios instance nếu cần custom requests
 export { api };

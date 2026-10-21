@@ -1,7 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
 
-// This function can be marked `async` if using `await` inside
-
 const privatePaths = ["/me"];
 const publicPaths = ["/login", "/register"];
 export function middleware(request: NextRequest) {
@@ -15,7 +13,6 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// See "Matching Paths" below to learn more
 export const config = {
   matcher: ["/me", "/login", "/register"],
 };
