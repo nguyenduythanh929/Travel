@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,10 +39,16 @@ public class ChatbotService {
     private final ChatConversationRepository conversationRepository;
     private final EmbeddingService embeddingService;
     private final ObjectMapper objectMapper;
-    private final OkHttpClient httpClient = new OkHttpClient();
+    private final OkHttpClient httpClient = new OkHttpClient.Builder()
+        .connectTimeout(15, TimeUnit.SECONDS)
+        .readTimeout(60, TimeUnit.SECONDS)
+        .writeTimeout(15, TimeUnit.SECONDS)
+        .build();
 
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private static final int TOP_K_TOURS = 5;
+    private static final String EMPTY_GEMINI_RESPONSE =
+        "Xin lỗi, tôi không thể xử lý yêu cầu của bạn lúc này.";
 
     public ChatbotResponse chat(ChatbotRequest request) throws IOException {
         String sessionId = request.getSessionId();
@@ -131,70 +138,143 @@ public class ChatbotService {
     }
 
     private String callGeminiAPI(String userMessage, List<ChatConversationEntity> history, String systemPrompt) throws IOException {
-        StringBuilder conversationText = new StringBuilder();
-        conversationText.append(systemPrompt).append("\n\n");
-        for (ChatConversationEntity conv : history) {
-            conversationText.append("User: ").append(conv.getUserMessage()).append("\n");
-            conversationText.append("Assistant: ").append(conv.getBotResponse()).append("\n\n");
+        String apiKey = geminiApiConfig.getApiKey();
+        if (apiKey == null || apiKey.isBlank()) {
+            throw new IOException("Gemini API key is not configured.");
         }
-        conversationText.append("User: ").append(userMessage).append("\n");
-        conversationText.append("Assistant: ");
+
+        ObjectNode requestBody = buildGeminiRequestBody(userMessage, history, systemPrompt);
+        Request request = buildGeminiHttpRequest(
+            geminiApiConfig.getApiUrl(),
+            geminiApiConfig.getModel(),
+            apiKey,
+            requestBody
+        );
+
+        try (Response response = httpClient.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new IOException("Gemini API request failed with HTTP status " + response.code() + ".");
+            }
+
+            ResponseBody responseBody = response.body();
+            if (responseBody == null) {
+                throw new IOException("Gemini API returned an empty response.");
+            }
+            return parseGeminiResponse(responseBody.string(), objectMapper);
+        }
+    }
+
+    ObjectNode buildGeminiRequestBody(
+        String userMessage,
+        List<ChatConversationEntity> history,
+        String systemPrompt
+    ) {
         ObjectNode requestBody = objectMapper.createObjectNode();
 
         ArrayNode contents = objectMapper.createArrayNode();
-        ObjectNode content = objectMapper.createObjectNode();
-
-        ArrayNode parts = objectMapper.createArrayNode();
-        ObjectNode part = objectMapper.createObjectNode();
-        part.put("text", conversationText.toString());
-        parts.add(part);
-
-        content.set("parts", parts);
-        contents.add(content);
+        for (ChatConversationEntity conversation : history) {
+            if (conversation == null) {
+                continue;
+            }
+            addContent(contents, "user", conversation.getUserMessage());
+            addContent(contents, "model", conversation.getBotResponse());
+        }
+        addContent(contents, "user", userMessage);
 
         requestBody.set("contents", contents);
+
+        ObjectNode systemInstruction = objectMapper.createObjectNode();
+        ArrayNode instructionParts = objectMapper.createArrayNode();
+        ObjectNode instructionPart = objectMapper.createObjectNode();
+        instructionPart.put("text", systemPrompt);
+        instructionParts.add(instructionPart);
+        systemInstruction.set("parts", instructionParts);
+        requestBody.set("system_instruction", systemInstruction);
+
         ObjectNode generationConfig = objectMapper.createObjectNode();
         generationConfig.put("temperature", 0.7);
         generationConfig.put("maxOutputTokens", 2048);
         requestBody.set("generationConfig", generationConfig);
+        return requestBody;
+    }
 
+    private void addContent(ArrayNode contents, String role, String text) {
+        if (text == null || text.isBlank()) {
+            return;
+        }
+
+        ObjectNode content = objectMapper.createObjectNode();
+        content.put("role", role);
+        ArrayNode parts = objectMapper.createArrayNode();
+        ObjectNode part = objectMapper.createObjectNode();
+        part.put("text", text);
+        parts.add(part);
+        content.set("parts", parts);
+        contents.add(content);
+    }
+
+    static String buildGeminiEndpoint(String apiUrl, String model) {
+        String baseUrl = apiUrl.replaceAll("/+$", "");
+        return baseUrl + "/models/" + model + ":generateContent";
+    }
+
+    static Request buildGeminiHttpRequest(String apiUrl, String model, String apiKey, ObjectNode requestBody) {
         RequestBody body = RequestBody.create(requestBody.toString(), JSON);
-        String url = geminiApiConfig.getApiUrl() + geminiApiConfig.getModel() + geminiApiConfig.getApiKey();
-
-        Request request = new Request.Builder()
-            .url(url)
-            .header("content-type", "application/json")
+        return new Request.Builder()
+            .url(buildGeminiEndpoint(apiUrl, model))
+            .header("Content-Type", "application/json")
+            .header("x-goog-api-key", apiKey)
             .post(body)
             .build();
+    }
 
-        try (Response response = httpClient.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                String errorBody = response.body() != null ? response.body().string() : "No error details";
-                throw new IOException("Unexpected response from Gemini API: " + response.code() + " - " + errorBody);
-            }
-
-            assert response.body() != null;
-            String responseBody = response.body().string();
-            JsonNode jsonResponse = objectMapper.readTree(responseBody);
-
-            if (jsonResponse.has("candidates") && jsonResponse.get("candidates").isArray()) {
-                JsonNode candidates = jsonResponse.get("candidates");
-                if (!candidates.isEmpty()) {
-                    JsonNode firstCandidate = candidates.get(0);
-                    if (firstCandidate.has("content")) {
-                        JsonNode content2 = firstCandidate.get("content");
-                        if (content2.has("parts") && content2.get("parts").isArray()) {
-                            JsonNode parts2 = content2.get("parts");
-                            if (!parts2.isEmpty() && parts2.get(0).has("text")) {
-                                return parts2.get(0).get("text").asText();
-                            }
-                        }
-                    }
-                }
-            }
-
-            return "Xin lỗi, tôi không thể xử lý yêu cầu của bạn lúc này.";
+    static String parseGeminiResponse(String responseBody, ObjectMapper objectMapper) throws IOException {
+        JsonNode jsonResponse;
+        try {
+            jsonResponse = objectMapper.readTree(responseBody);
+        } catch (IOException e) {
+            throw new IOException("Gemini API returned an invalid response.", e);
         }
+        if (jsonResponse == null || !jsonResponse.isObject()) {
+            return EMPTY_GEMINI_RESPONSE;
+        }
+
+        JsonNode blockReason = jsonResponse.path("promptFeedback").path("blockReason");
+        if (blockReason.isTextual()
+            && !blockReason.asText().isBlank()
+            && !"BLOCK_REASON_UNSPECIFIED".equals(blockReason.asText())) {
+            return EMPTY_GEMINI_RESPONSE;
+        }
+
+        JsonNode candidates = jsonResponse.path("candidates");
+        if (!candidates.isArray() || candidates.isEmpty()) {
+            return EMPTY_GEMINI_RESPONSE;
+        }
+
+        JsonNode firstCandidate = candidates.get(0);
+        String finishReason = firstCandidate.path("finishReason").asText("");
+        if (List.of("SAFETY", "RECITATION", "BLOCKLIST", "PROHIBITED_CONTENT", "SPII")
+            .contains(finishReason)) {
+            return EMPTY_GEMINI_RESPONSE;
+        }
+
+        JsonNode parts = firstCandidate.path("content").path("parts");
+        if (!parts.isArray() || parts.isEmpty()) {
+            return EMPTY_GEMINI_RESPONSE;
+        }
+
+        StringBuilder text = new StringBuilder();
+        for (JsonNode part : parts) {
+            JsonNode textPart = part.get("text");
+            if (textPart != null && textPart.isTextual()) {
+                text.append(textPart.asText());
+            }
+        }
+
+        if (text.length() == 0 || text.toString().isBlank()) {
+            return EMPTY_GEMINI_RESPONSE;
+        }
+        return text.toString();
     }
 
     private List<TourEntity> findRelevantTours(String query) throws IOException {

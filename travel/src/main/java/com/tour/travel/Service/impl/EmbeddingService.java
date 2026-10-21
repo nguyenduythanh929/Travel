@@ -69,6 +69,11 @@ public class EmbeddingService {
     }
 
     private List<Double> generateEmbedding(String text) throws IOException {
+        String apiKey = geminiApiConfig.getApiKey();
+        if (apiKey == null || apiKey.isBlank()) {
+            throw new IOException("Gemini API key is not configured.");
+        }
+
         ObjectNode requestBody = objectMapper.createObjectNode();
 
         ObjectNode content = objectMapper.createObjectNode();
@@ -82,18 +87,19 @@ public class EmbeddingService {
 
         RequestBody body = RequestBody.create(requestBody.toString(), JSON);
 
-        String url = geminiApiConfig.getApiUrl() + EMBEDDING_MODEL + ":embedContent?key=" + geminiApiConfig.getApiKey();
+        String url = geminiApiConfig.getApiUrl().replaceAll("/+$", "")
+            + "/models/" + EMBEDDING_MODEL + ":embedContent";
 
         Request request = new Request.Builder()
             .url(url)
             .header("content-type", "application/json")
+            .header("x-goog-api-key", apiKey)
             .post(body)
             .build();
 
         try (Response response = httpClient.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                String errorBody = response.body() != null ? response.body().string() : "No error details";
-                throw new IOException("Failed to generate embedding: " + response.code() + " - " + errorBody);
+                throw new IOException("Failed to generate embedding: HTTP status " + response.code() + ".");
             }
 
             assert response.body() != null;
