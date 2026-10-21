@@ -159,7 +159,7 @@ public class ChatbotService {
         requestBody.set("generationConfig", generationConfig);
 
         RequestBody body = RequestBody.create(requestBody.toString(), JSON);
-        String url = geminiApiConfig.getApiUrl() + geminiApiConfig.getModel() + ":generateContent?key=" + geminiApiConfig.getApiKey();
+        String url = geminiApiConfig.getApiUrl() + geminiApiConfig.getModel() + geminiApiConfig.getApiKey();
 
         Request request = new Request.Builder()
             .url(url)
