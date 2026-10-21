@@ -304,6 +304,10 @@ public class ChatbotService {
             }
         }
 
+        if (similarities.isEmpty()) {
+            return allTours.stream().limit(TOP_K_TOURS).collect(Collectors.toList());
+        }
+
         return similarities.stream()
             .sorted((a, b) -> Double.compare(b.similarity, a.similarity))
             .limit(TOP_K_TOURS)

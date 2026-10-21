@@ -25,7 +25,7 @@ public class EmbeddingService {
     private final OkHttpClient httpClient = new OkHttpClient();
 
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    private static final String EMBEDDING_MODEL = "text-embedding-004";
+    private static final String EMBEDDING_MODEL = "gemini-embedding-001";
 
     public List<Double> generateTourEmbedding(TourEntity tour) throws IOException {
         String tourText = buildTourText(tour);

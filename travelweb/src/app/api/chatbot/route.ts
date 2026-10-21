@@ -9,7 +9,7 @@ const api = axios.create({
 });
 
 export interface ChatbotRequest {
-  userMessage: string;
+  message: string;
   sessionId?: string | null;
   userId?: number | null;
 }
@@ -36,9 +36,10 @@ export const getResponseAi = (
   sessionId?: string | null,
   userId?: number | null
 ) => {
-  return api.post<ChatbotResponse>("/api/chatbot/chat", {
+  const request: ChatbotRequest = {
     message: message,
     sessionId: sessionId || null,
     userId: userId || null,
-  });
+  };
+  return api.post<ChatbotResponse>("/api/chatbot/chat", request);
 };
